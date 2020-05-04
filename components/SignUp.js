@@ -16,7 +16,7 @@ import {
 import React, {Component} from 'react';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen"
 import {Actions} from "react-native-router-flux";
-import {View, KeyboardAvoidingView} from "react-native";
+import {View, KeyboardAvoidingView, Keyboard} from "react-native";
 import {API_URL} from "../constant"
 
 class SignUp extends Component {
@@ -28,6 +28,7 @@ class SignUp extends Component {
     }
 
     handlerSignUp() {
+        Keyboard.dismiss();
         console.log(this.state.password);
         if(this.state.password!==this.state.confirmPassword){
             Toast.show({
@@ -106,24 +107,25 @@ class SignUp extends Component {
                 </Header>
                 {
                     <Content>
-                        <Text style={{fontSize: 28, fontWeight: "bold", paddingLeft: 20, paddingTop: 30}}> Sign Up</Text>
-                        <Text style={{fontSize: 15, paddingTop: 17, paddingLeft: 25, color: "grey"}}>
+                        <Text style={{fontSize: 28, paddingLeft: 20, paddingTop: 30, fontFamily: "Ubuntu-Medium"}}> Sign Up</Text>
+                        <Text style={{fontSize: 17, paddingTop: 17, paddingLeft: 25, color: "grey", fontFamily: "Jost"}}>
                             Search stores where you can buy what you need
                         </Text>
                         <Root>
-                            <KeyboardAvoidingView behavior='position'>
+                            <KeyboardAvoidingView behavior='padding' style={{flex: 1}} >
                                 <List style={{
                                     paddingTop: hp("10%"),
                                     paddingBottom: hp("3%"),
                                     width: wp("90%"),
                                     justifyContent: "center"
                                 }}>
-                                    <ListItem style={{borderColor: 'white'}}>
+                                    <ListItem style={{borderColor: 'white', width: wp("85%")}}>
                                         <InputGroup>
                                             <Icon name="ios-person" style={{color: '#2cabfe', marginLeft: 3}}/>
                                             <Item floatingLabel>
-                                                <Label style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "grey"}}> Username </Label>
+                                                <Label style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "grey", fontFamily: "Ubuntu-Medium"}}> Username </Label>
                                                 <Input
+                                                    style={{fontSize: 17, paddingLeft:10, fontFamily: "Ubuntu-Regular"}}
                                                     onChangeText={(text)=>this.setState({username:text})}
                                                     value = {this.state.username}
                                                     onBlur={()=>{
@@ -141,12 +143,13 @@ class SignUp extends Component {
                                             </Item>
                                         </InputGroup>
                                     </ListItem>
-                                    <ListItem style={{borderColor: 'white', paddingTop: hp("3%")}}>
+                                    <ListItem style={{borderColor: 'white', paddingTop: hp("3%"), width: wp("85%")}}>
                                         <InputGroup>
                                             <Icon type="MaterialIcons" name="mail" style={{color: '#2cabfe'}}/>
                                             <Item floatingLabel>
-                                                <Label style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "grey"}}> Email </Label>
+                                                <Label style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "grey", fontFamily: "Ubuntu-Medium"}}> Email </Label>
                                                 <Input
+                                                    style={{fontSize: 17, paddingLeft:10, fontFamily: "Ubuntu-Regular"}}
                                                     onChangeText={(text)=>this.setState({email:text})}
                                                     value = {this.state.email}
                                                     onBlur={()=>{
@@ -166,12 +169,13 @@ class SignUp extends Component {
                                             </Item>
                                         </InputGroup>
                                     </ListItem>
-                                    <ListItem style={{borderColor: 'white',paddingTop: hp("3%")}}>
+                                    <ListItem style={{borderColor: 'white',paddingTop: hp("3%"), width: wp("85%")}}>
                                         <InputGroup>
                                             <Icon name="ios-unlock" style={{color: '#2cabfe', marginLeft: 4}}/>
                                             <Item floatingLabel>
-                                                <Label style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "grey"}}> Password </Label>
+                                                <Label style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "grey", fontFamily: "Ubuntu-Medium"}}> Password </Label>
                                                 <Input
+                                                    style={{fontSize: 17, paddingLeft:10, fontFamily: "Ubuntu-Regular"}}
                                                     onChangeText={(text)=>this.setState({password:text})}
                                                     value = {this.state.password}
                                                     secureTextEntry = {true}
@@ -191,12 +195,13 @@ class SignUp extends Component {
                                             </Item>
                                         </InputGroup>
                                     </ListItem>
-                                    <ListItem style={{borderColor: 'white', paddingTop: hp("3%")}}>
+                                    <ListItem style={{borderColor: 'white', paddingTop: hp("3%"), width: wp("85%")}}>
                                         <InputGroup>
                                             <Icon type="MaterialIcons" name="done" style={{color: '#2cabfe'}}/>
                                             <Item floatingLabel>
-                                                <Label style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "grey"}}>Confirm Password </Label>
+                                                <Label style={{padding: 10, fontSize: 15, fontWeight: "bold", color: "grey", fontFamily: "Ubuntu-Medium"}}>Confirm Password </Label>
                                                 <Input
+                                                    style={{fontSize: 17, paddingLeft:10, fontFamily: "Ubuntu-Regular"}}
                                                     onChangeText={(text)=>this.setState({confirmPassword:text})}
                                                     value = {this.state.confirmPassword}
                                                     secureTextEntry = {true}
@@ -217,14 +222,16 @@ class SignUp extends Component {
                                     </ListItem>
                                 </List>
                                 <Button rounded info style={{borderRadius: 25,
-                                    width: wp("90%"),
+                                    width: wp("80%"),
                                     alignSelf: "center",
                                     justifyContent: "center",
                                     marginTop: hp("5%")
                                 }}
-                                        onPress={this.handlerSignUp.bind(this)}
+                                        onPress={
+                                            this.handlerSignUp.bind(this)
+                                        }
                                 >
-                                    <Text style={{fontWeight: "500", fontSize: 16}}>Sign Up</Text>
+                                    <Text style={{fontWeight: "500", fontSize: 17, fontFamily: "Ubuntu-Medium"}}>Sign Up</Text>
                                 </Button>
                             </KeyboardAvoidingView>
                         </Root>
