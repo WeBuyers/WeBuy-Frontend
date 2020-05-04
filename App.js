@@ -1,12 +1,31 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as Font from "expo-font"
+import Login from "./components/Login"
+import store from "./stores"
+import {Provider} from "react-redux"
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+
+export default class App extends Component{
+  state={
+      fontLoaded: false
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      'Jost': require('./assets/fonts/Jost.ttf'),
+      'Ubuntu-Medium': require('./assets/fonts/Ubuntu-Medium.ttf')
+    });
+    this.setState({fontLoaded: true});
+  }
+
+  render() {
+    return (
+        <Provider store={store}>
+          <Login/>
+        </Provider>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
