@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import * as Font from "expo-font"
 import Login from "./components/Login"
+import SignUp from "./components/SignUp"
 import store from "./stores"
 import {Provider} from "react-redux"
+import {Scene, Router} from "react-native-router-flux";
 
 
 export default class App extends Component{
@@ -11,20 +12,20 @@ export default class App extends Component{
       fontLoaded: false
   }
 
-  async componentDidMount() {
-    await Font.loadAsync({
-      'Jost': require('./assets/fonts/Jost.ttf'),
-      'Ubuntu-Medium': require('./assets/fonts/Ubuntu-Medium.ttf')
-    });
-    this.setState({fontLoaded: true});
-  }
 
   render() {
-    return (
-        <Provider store={store}>
-          <Login/>
-        </Provider>
-    );
+
+      return (
+          <Provider store={store}>
+            <Router>
+              <Scene key='root'>
+                <Scene key="login" component={Login} hideNavBar={true} title="Login" initial={true}/>
+                <Scene key="signup" component={SignUp} hideNavBar={true}/>
+              </Scene>
+            </Router>
+          </Provider>
+      );
+
   }
 }
 
