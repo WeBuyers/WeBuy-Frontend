@@ -6,6 +6,7 @@ import icon from "../assets/icon.png"
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen"
 import {Actions} from "react-native-router-flux";
 import {View, KeyboardAvoidingView, Keyboard} from "react-native";
+import {WaveIndicator} from "react-native-indicators"
 import {connect} from "react-redux"
 import {setUsername, setPassword} from "../actions/LoginAction"
 import {API_URL} from "../constant"
@@ -174,7 +175,9 @@ class Login extends Component {
                 </Container>
             );
         }else {
-            return <View><Text>Loading...</Text></View>
+            return <View style={{justifyContent: "center", flex: 1, alignItems: "center"}}>
+                <WaveIndicator color="#2cabfe" />
+            </View>
         }
     }
 }
