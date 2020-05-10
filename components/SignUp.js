@@ -60,23 +60,23 @@ class SignUp extends Component {
             let pattern = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
             if (pattern.test(this.state.email)) {
                 console.log(this.state.password);
-                fetch(`${API_URL}/signup`, {
+                fetch(`${API_URL}/auth/signup`, {
                     method: 'POST',
                     headers: {
                         // 'Accept': 'application/json',
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        "newPassword": this.state.password,
+                        "password": this.state.password,
                         "email": this.state.email,
-                        "newUsername": this.state.username,
+                        "username": this.state.username,
                     })
                 }).then((response) => {
                     if (response.status == "200") {
                         alert('Register successfully');
                         console.log('Register successfully');
                         Actions.pop();
-                    } else if (response.status == "202") {
+                    } else if (response.status == "201") {
                         alert('User has existed');
                         console.log('The username has existed')
                     }

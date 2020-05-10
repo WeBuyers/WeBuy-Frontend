@@ -14,8 +14,8 @@ export default class App extends Component{
           <Provider store={store}>
             <Router>
               <Scene key='root'>
-                {/*<Scene key="login" component={Login} hideNavBar={true} title="Login" initial={true}/>*/}
-                {/*<Scene key="signup" component={SignUp} hideNavBar={true}/>*/}
+                <Scene key="login" component={Login} hideNavBar={true} title="Login" initial={true}/>
+                <Scene key="signup" component={SignUp} hideNavBar={true}/>
                 <Scene key="home" component={Home} hideNavBar={true}/>
               </Scene>
             </Router>

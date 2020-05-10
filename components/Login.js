@@ -31,7 +31,7 @@ class Login extends Component {
     }
 
     async loginHandler(){
-        return fetch(`${API_URL}/login`,{
+        return fetch(`${API_URL}/auth/login`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -45,7 +45,7 @@ class Login extends Component {
             .then((response) => {
                 console.log(response.status);
                 if (response.status == "200") {
-                    return response.headers;
+                    return response.json();
                 } else {
                     Toast.show({
                         text: "Invalid Username or Password",
@@ -57,9 +57,10 @@ class Login extends Component {
                     return null;
                 }
             })
-            .then((headers)=>{
-                if(headers){
-                   console.log(JSON.stringify(headers));
+            .then((responseData)=>{
+                if(responseData){
+                   console.log(JSON.stringify(responseData));
+                   Actions.home();
                 }
             })
             .catch((error) => {
