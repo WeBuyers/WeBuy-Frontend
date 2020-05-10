@@ -60,6 +60,7 @@ class Login extends Component {
             .then((responseData)=>{
                 if(responseData){
                    console.log(JSON.stringify(responseData));
+                    {/*TODO: Store token into async storage and redux state*/}
                    Actions.home();
                 }
             })

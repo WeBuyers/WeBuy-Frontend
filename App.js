@@ -9,7 +9,12 @@ import {Scene, Router} from "react-native-router-flux";
 
 
 export default class App extends Component{
-  render() {
+
+    async componentDidMount() {
+        {/*TODO: Load Token for persistent login*/}
+    }
+
+    render() {
       return (
           <Provider store={store}>
             <Router>

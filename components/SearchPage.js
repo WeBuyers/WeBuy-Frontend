@@ -322,6 +322,7 @@ class SearchPage extends Component {
         )
     }
 }
+/*TODO: Adjust the styles of this page*/
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
