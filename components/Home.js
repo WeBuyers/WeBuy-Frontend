@@ -35,14 +35,14 @@ class Home extends Component {
                 break;
         }
         return (
-            <Container style={{flex: 1, flexDirection: 'column'}}>
+            <View style={{flex: 1, flexDirection: 'column'}}>
                 {view}
                 <Footer style={{
                     position: "absolute",
                     left: 0,
-                    right: 0,
-                    top: hp('77%'),
-                    height: 95
+                    top: hp('89%'),
+                    height: 95,
+                    alignSelf: "flex-end",
                 }}>
                     <FooterTab style={{paddingBottom: 20}}>
                         <Button vertical onPress = {()=>{
@@ -58,14 +58,14 @@ class Home extends Component {
                                 this.setState({page: "appeal"});
                             }}}>
                             <Icon type='MaterialIcons' name="store"/>
-                            <Text style = {{fontSize: 12}}>Appeal</Text>
+                            <Text style = {{fontSize: 12}}>Forum</Text>
                         </Button>
                         <Button vertical onPress = {()=>{
                             if(this.state.page != "wishlist"){
                                 this.setState({page: "wishlist"});
                             }}}>
                             <Icon type='MaterialIcons' name="apps"/>
-                            <Text style = {{fontSize: 12}}>WishList</Text>
+                            <Text style = {{fontSize: 12, textAlign: "center"}}>Shopping List</Text>
                         </Button>
                         <Button vertical onPress = {()=>{
                             if(this.state.page != "profile"){
@@ -76,7 +76,7 @@ class Home extends Component {
                         </Button>
                     </FooterTab>
                 </Footer>
-            </Container>
+            </View>
         );
     }
 }
