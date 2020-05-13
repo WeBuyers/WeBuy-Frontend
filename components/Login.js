@@ -8,7 +8,7 @@ import {Actions} from "react-native-router-flux";
 import {View, KeyboardAvoidingView, Keyboard, AsyncStorage} from "react-native";
 import {WaveIndicator} from "react-native-indicators"
 import {connect} from "react-redux"
-import {setUsername, setPassword} from "../actions/LoginAction"
+import {setUsername, setPassword, setToken, setId} from "../actions/LoginAction"
 import {API_URL, TOKEN_KEY} from "../constant"
 
 class Login extends Component {
@@ -73,6 +73,8 @@ class Login extends Component {
                 if(responseData){
                    console.log(JSON.stringify(responseData));
                    this._onValueChange(responseData.token);
+                   this.props.setToken(responseData.token);
+                   this.props.setId(responseData.user_id);
                    Actions.home();
                 }
             })
@@ -199,4 +201,4 @@ class Login extends Component {
 export default connect(state => ({
     username: state.username,
     password: state.password
-}), {setUsername, setPassword})(Login);
+}), {setUsername, setPassword, setToken, setId})(Login);

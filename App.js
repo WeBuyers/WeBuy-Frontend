@@ -17,6 +17,7 @@ export default class App extends Component{
        await AsyncStorage.getItem(TOKEN_KEY)
            .then((accessToken)=>{
                accessToken = "Bearer " + accessToken;
+               console.log(accessToken);
                if(accessToken !== null){
                    fetch(`${API_URL}/auth/login`, {
                        method: 'POST',
