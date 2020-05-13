@@ -5,11 +5,11 @@ import React, {Component} from 'react';
 import icon from "../assets/icon.png"
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen"
 import {Actions} from "react-native-router-flux";
-import {View, KeyboardAvoidingView, Keyboard} from "react-native";
+import {View, KeyboardAvoidingView, Keyboard, AsyncStorage} from "react-native";
 import {WaveIndicator} from "react-native-indicators"
 import {connect} from "react-redux"
 import {setUsername, setPassword} from "../actions/LoginAction"
-import {API_URL} from "../constant"
+import {API_URL, TOKEN_KEY} from "../constant"
 
 class Login extends Component {
     constructor(props) {
@@ -28,6 +28,18 @@ class Login extends Component {
             'Ubuntu-Regular': require('../assets/fonts/Ubuntu-Regular.ttf')
         });
         this.setState({fontLoaded: true});
+    }
+
+    async _onValueChange(accessToken){
+        try{
+            await AsyncStorage.setItem(TOKEN_KEY, accessToken);
+            await AsyncStorage.getItem(TOKEN_KEY)
+                .then(value =>{
+                    if(value!==null) console.log(value);
+                })
+        }catch (error) {
+            console.log(`Async Storage Error --> ${error}`);
+        }
     }
 
     async loginHandler(){
@@ -60,7 +72,7 @@ class Login extends Component {
             .then((responseData)=>{
                 if(responseData){
                    console.log(JSON.stringify(responseData));
-                    {/*TODO: Store token into async storage and redux state*/}
+                   this._onValueChange(responseData.token);
                    Actions.home();
                 }
             })
