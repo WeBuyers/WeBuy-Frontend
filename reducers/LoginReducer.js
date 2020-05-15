@@ -1,7 +1,8 @@
 const initial = {
     username: "",
     password: "",
-    auth: ""
+    auth: "",
+    user_id: 0
 }
 
 export const loginReducer = (state = initial, action) =>{
@@ -21,6 +22,11 @@ export const loginReducer = (state = initial, action) =>{
             return {
                 ...state,
                 auth: action.text
+            }
+        case 'SET_ID':
+            return {
+                ...state,
+                user_id: action.payload
             }
         default:
             return state

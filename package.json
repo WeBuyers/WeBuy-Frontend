@@ -16,6 +16,7 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
+    "react-native-autocomplete-input": "^4.1.0",
     "react-native-elements": "^2.0.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-indicators": "^0.17.0",
@@ -27,7 +28,9 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "~0.11.7",
     "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
+    "reanimated-bottom-sheet": "^1.0.0-alpha.20",
+    "redux": "^4.0.5",
+    "rn-bottom-drawer": "^1.4.3"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",

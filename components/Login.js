@@ -5,11 +5,11 @@ import React, {Component} from 'react';
 import icon from "../assets/icon.png"
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen"
 import {Actions} from "react-native-router-flux";
-import {View, KeyboardAvoidingView, Keyboard} from "react-native";
+import {View, KeyboardAvoidingView, Keyboard, AsyncStorage} from "react-native";
 import {WaveIndicator} from "react-native-indicators"
 import {connect} from "react-redux"
-import {setUsername, setPassword} from "../actions/LoginAction"
-import {API_URL} from "../constant"
+import {setUsername, setPassword, setToken, setId} from "../actions/LoginAction"
+import {API_URL, TOKEN_KEY} from "../constant"
 
 class Login extends Component {
     constructor(props) {
@@ -30,8 +30,20 @@ class Login extends Component {
         this.setState({fontLoaded: true});
     }
 
+    async _onValueChange(accessToken){
+        try{
+            await AsyncStorage.setItem(TOKEN_KEY, accessToken);
+            await AsyncStorage.getItem(TOKEN_KEY)
+                .then(value =>{
+                    if(value!==null) console.log(value);
+                })
+        }catch (error) {
+            console.log(`Async Storage Error --> ${error}`);
+        }
+    }
+
     async loginHandler(){
-        return fetch(`${API_URL}/login`,{
+        return fetch(`${API_URL}/auth/login`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -45,7 +57,7 @@ class Login extends Component {
             .then((response) => {
                 console.log(response.status);
                 if (response.status == "200") {
-                    return response.headers;
+                    return response.json();
                 } else {
                     Toast.show({
                         text: "Invalid Username or Password",
@@ -57,9 +69,13 @@ class Login extends Component {
                     return null;
                 }
             })
-            .then((headers)=>{
-                if(headers){
-                   console.log(JSON.stringify(headers));
+            .then((responseData)=>{
+                if(responseData){
+                   console.log(JSON.stringify(responseData));
+                   this._onValueChange(responseData.token);
+                   this.props.setToken(responseData.token);
+                   this.props.setId(responseData.user_id);
+                   Actions.home();
                 }
             })
             .catch((error) => {
@@ -185,4 +201,4 @@ class Login extends Component {
 export default connect(state => ({
     username: state.username,
     password: state.password
-}), {setUsername, setPassword})(Login);
+}), {setUsername, setPassword, setToken, setId})(Login);
