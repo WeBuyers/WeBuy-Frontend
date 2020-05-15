@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import {Text, Item, Input, Container, Content, Card, CardItem, Right, Thumbnail} from 'native-base';
 import {Button, Icon} from "react-native-elements"
-import {View, StyleSheet, FlatList} from "react-native"
+import {View, StyleSheet, FlatList, ScrollView} from "react-native"
 import MapView from "react-native-maps";
 import {Marker, AnimatedRegion} from "react-native-maps";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen"
 import Autocomplete from "react-native-autocomplete-input"
 import {PLACE_API, API_KEY, API_URL} from "../constant"
-// import avocado from "../assets/avocado.jpg";
-// import supermarket from "../assets/supermarket.jpg"
+import BottomDrawer from "rn-bottom-drawer";
 
 class SearchPage extends Component {
     state={
@@ -228,6 +227,52 @@ class SearchPage extends Component {
                         shadowRadius: 30
                     }}
                 />
+
+                <BottomDrawer
+                    containerHeight={hp("40%")}
+                    offset={25}
+                    roundedEdges={true}
+                    startUp={false}
+                    backgroundColor= "#3888FE"
+                >
+                    <Text style={{
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        fontSize: 17,
+                        fontFamily: "Ubuntu-Regular",
+                        alignSelf: "center",
+                        color: "white"
+                    }}>Search Grocery Stores Nearby!</Text>
+                    <FlatList data={[
+                        {
+                            name: "store1",
+                            value: 1
+                        },
+                        {
+                            name: "store2",
+                            value: 2
+                        },
+                        {
+                            name: "store3",
+                            value: 3
+                        }
+                            ]}
+                              renderItem={({item})=>(
+                                  <Card style={{
+                                      alignItems: "center",
+                                      padding: 30,
+                                      height: hp("22%"),
+                                      width: wp("47%"),
+                                      borderRadius: 25
+                                  }}
+                                        key={item.value}
+                                  >
+                                      <CardItem></CardItem>
+                                  </Card>
+                              )}
+                              horizontal
+                    />
+                </BottomDrawer>
                 {/*<View style={{marginTop: hp("65%")}}>*/}
                 {/*    {*/}
                 {/*        this.state.searched?*/}
