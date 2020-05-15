@@ -7,7 +7,7 @@ import {Marker, AnimatedRegion} from "react-native-maps";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen"
 import Autocomplete from "react-native-autocomplete-input"
 import {PLACE_API, API_KEY, API_URL} from "../constant"
-import BottomDrawer from "rn-bottom-drawer";
+import BottomSheet from "reanimated-bottom-sheet"
 
 class SearchPage extends Component {
     state={
@@ -29,7 +29,7 @@ class SearchPage extends Component {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                 });
-                fetch(`${PLACE_API}/json?key=${API_KEY}&location=${position.coords.latitude},${position.coords.longitude}&radius=1000&type=supermarket,grocery_or_supermarket`,{
+                fetch(`${PLACE_API}/json?key=${API_KEY}&location=${position.coords.latitude},${position.coords.longitude}&radius=800&type=supermarket,grocery_or_supermarket`,{
                     method: "GET"
                 })
                     .then((response)=>{
@@ -118,6 +118,44 @@ class SearchPage extends Component {
         //     })
         //     .catch(error=>console.log(`error--> ${error}`))
     }
+
+    renderDrawer = () => (
+        <View style={{backgroundColor: '#5594FE', height: hp("70%")}}>
+            <Text style={{
+                paddingTop: 10,
+                paddingBottom: 10,
+                fontSize: 17,
+                fontFamily: "Ubuntu-Regular",
+                alignSelf: "center",
+                color: "white"
+            }}>Search Grocery Stores Nearby!</Text>
+            <FlatList data={this.state.stores}
+                      renderItem={({item})=>(
+                          <Card style={{
+                              alignItems: "center",
+                              padding: 30,
+                              height: hp("22%"),
+                              width: wp("47%"),
+                              borderRadius: 25
+                          }}
+                          >
+                              <CardItem>
+                                  <Button
+                                      title={item.name}
+                                      color="lightblue"
+                                      size={50}
+                                      raised={true}
+                                  />
+                              </CardItem>
+                              <CardItem>
+                                  <Text style={{fontFamily: "Ubuntu-Regular"}}>{item.place}</Text>
+                              </CardItem>
+                          </Card>
+                      )}
+                      horizontal
+            />
+        </View>
+    )
 
     render() {
         let data = this.findItem(this.state.searchItem);
@@ -228,51 +266,14 @@ class SearchPage extends Component {
                     }}
                 />
 
-                <BottomDrawer
-                    containerHeight={hp("40%")}
-                    offset={25}
-                    roundedEdges={true}
-                    startUp={false}
-                    backgroundColor= "#3888FE"
-                >
-                    <Text style={{
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                        fontSize: 17,
-                        fontFamily: "Ubuntu-Regular",
-                        alignSelf: "center",
-                        color: "white"
-                    }}>Search Grocery Stores Nearby!</Text>
-                    <FlatList data={[
-                        {
-                            name: "store1",
-                            value: 1
-                        },
-                        {
-                            name: "store2",
-                            value: 2
-                        },
-                        {
-                            name: "store3",
-                            value: 3
-                        }
-                            ]}
-                              renderItem={({item})=>(
-                                  <Card style={{
-                                      alignItems: "center",
-                                      padding: 30,
-                                      height: hp("22%"),
-                                      width: wp("47%"),
-                                      borderRadius: 25
-                                  }}
-                                        key={item.value}
-                                  >
-                                      <CardItem></CardItem>
-                                  </Card>
-                              )}
-                              horizontal
-                    />
-                </BottomDrawer>
+                <BottomSheet
+                    snapPoints={[700, 250]}
+                    initialSnap={1}
+                    renderContent={this.renderDrawer}
+                    borderRadius={20}
+                />
+
+
                 {/*<View style={{marginTop: hp("65%")}}>*/}
                 {/*    {*/}
                 {/*        this.state.searched?*/}

@@ -40,6 +40,7 @@ class Home extends Component {
                 <Footer style={{
                     position: "absolute",
                     left: 0,
+                    bottom: 0,
                     top: hp('89%'),
                     height: 95,
                     alignSelf: "flex-end",
