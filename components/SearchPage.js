@@ -149,6 +149,18 @@ class SearchPage extends Component {
                                       color="lightblue"
                                       size={50}
                                       raised={true}
+                                      onPress={()=>{
+                                          let newStores = this.state.stores;
+                                          for (let i = 0; i < newStores.length; i++) {
+                                              if (item.id === newStores[i].id) {
+                                                  newStores[i].color = "red";
+                                              } else {
+                                                  newStores[i].color = "lightblue";
+                                              }
+                                          }
+                                          console.log(newStores);
+                                          this.setState({stores: newStores});
+                                      }}
                                   />
                               </CardItem>
                               <CardItem>
@@ -246,7 +258,7 @@ class SearchPage extends Component {
                             }}
                             size={15}
                             onPress={()=>{
-                                this.BottomRef.current.snapTo(0)
+                                this.BottomRef.current.snapTo(1)
                                 this.searchItem(this.state.searchItem)
                             }}
                     />
@@ -272,7 +284,7 @@ class SearchPage extends Component {
                 />
 
                 <BottomSheet
-                    snapPoints={[700, 250]}
+                    snapPoints={[700, 400, 100]}
                     initialSnap={1}
                     ref = {this.BottomRef}
                     renderContent={this.renderDrawer}
