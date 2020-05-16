@@ -5,7 +5,7 @@ import SignUp from "./components/SignUp"
 import Home from "./components/Home"
 import store from "./stores"
 import {Provider} from "react-redux"
-import {Scene, Router} from "react-native-router-flux";
+import {Scene, Router, Actions} from "react-native-router-flux";
 import {TOKEN_KEY, API_URL} from "./constant";
 
 

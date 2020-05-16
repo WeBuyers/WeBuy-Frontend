@@ -10,13 +10,17 @@ import {PLACE_API, API_KEY, API_URL} from "../constant"
 import BottomSheet from "reanimated-bottom-sheet"
 
 class SearchPage extends Component {
-    state={
-        latitude: 0.0,
-        longitude: 0.0,
-        searchItem: "",
-        stores: [],
-        searchResult: [],
-        searched: false
+    constructor(props) {
+        super(props);
+        this.state ={
+            latitude: 0.0,
+            longitude: 0.0,
+            searchItem: "",
+            stores: [],
+            searchResult: [],
+            searched: false
+        }
+        this.BottomRef = React.createRef();
     }
 
 
@@ -242,6 +246,7 @@ class SearchPage extends Component {
                             }}
                             size={15}
                             onPress={()=>{
+                                this.BottomRef.current.snapTo(0)
                                 this.searchItem(this.state.searchItem)
                             }}
                     />
@@ -269,6 +274,7 @@ class SearchPage extends Component {
                 <BottomSheet
                     snapPoints={[700, 250]}
                     initialSnap={1}
+                    ref = {this.BottomRef}
                     renderContent={this.renderDrawer}
                     borderRadius={20}
                 />
