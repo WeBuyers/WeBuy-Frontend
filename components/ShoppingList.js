@@ -31,14 +31,8 @@ class ShoppingList extends Component {
                                         style={styles.button}
                                         onPress={onButtonPress}
                                     >
-                                         <Text>{item.name}</Text>
+                                         <Text style={styles.text}>{item.name}</Text>
                                     </TouchableOpacity>
-
-                                    // <Button
-                                    //     title={item.name}
-                                    //     color="gray"
-                                    //     onPress={() => Alert.alert('hello')}
-                                    // />
                                 )}
                             />
                         </Tab>
@@ -68,13 +62,18 @@ const styles = StyleSheet.create({
         marginTop: 24,
     },
     button: {
-        backgroundColor: "lightblue",
+        backgroundColor: "#5594FE",
         paddingVertical: 24,
         marginVertical: 10,
         padding: 10,
         paddingHorizontal: 25,
-        borderRadius: 10
+        borderRadius: 10,
     },
+    text: {
+        fontSize: 30,
+        color: 'white',
+        textAlign: 'center',
+    }
 });
 
 export default ShoppingList;
