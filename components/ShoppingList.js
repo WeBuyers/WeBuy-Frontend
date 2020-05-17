@@ -71,8 +71,8 @@ class ShoppingList extends Component {
     constructor() {
         super();
         this.state = {
-            storeList: CONTENT,
-            groceryList: CONTENT, 
+            storeList: STORES,
+            groceryList: GROCERY, 
         }
     };
 
@@ -113,18 +113,18 @@ class ShoppingList extends Component {
                             </View>                                                      
                         </Tab>
                         <Tab heading={<TabHeading><Text>Wish List</Text></TabHeading>}>
-                            {/* <FlatList
-                                data={groceryExamples}
-                                style={styles.list}
+                            <FlatList
+                                data={this.state.groceryList}
+                                style={styles.listContainer}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
-                                        style={styles.groceryButton}
+                                        style={styles.wishHeader}
                                         onPress={() => Alert.alert('hi')}
                                     >
-                                         <Text style={styles.text}>{item.name}</Text>
+                                         <Text style={styles.wishText}>{item.name}</Text>
                                     </TouchableOpacity>
                                 )}
-                            /> */}
+                            />
                         </Tab>
                     </Tabs>
                 </Content>
@@ -141,29 +141,6 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
     },
-    list: {
-        marginTop: 0,
-        padding: 0,
-        fontSize: 18,
-        marginHorizontal: 10,
-    },
-    storeButton: {
-        backgroundColor: "#5594FE",
-        paddingVertical: 24,
-        marginVertical: 10,
-        padding: 0,
-        paddingHorizontal: 0,
-        borderRadius: 10,
-    },
-    groceryButton: {
-        backgroundColor: "lightgreen",
-        paddingVertical: 16,
-        marginVertical: 10,
-        padding: 0,
-        paddingHorizontal: 0,
-        borderRadius: 10,
-    },
-
     listContainer: {
         flex: 0,
         paddingTop: 8,
@@ -181,12 +158,19 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
       },
+      wishHeader: {
+        backgroundColor: 'mediumaquamarine',
+        paddingVertical: 20,
+        marginVertical: 5,
+        marginHorizontal: 16,
+        borderRadius: 10,
+      },
       separator: {
-        height: 0.4,
+        height: 0.5,
         backgroundColor: 'white',
         width: '95%',
-        marginLeft: 6,
-        marginRight: 12,
+        marginLeft: 0,
+        marginRight: 0,
       },
       content: {
         paddingLeft: 20,
@@ -202,6 +186,11 @@ const styles = StyleSheet.create({
             fontSize: 18,
             color: 'white',
             textAlign: 'left',
+      },
+      wishText: {
+        fontSize: 22,
+        color: 'white',
+        textAlign: 'center',
       }
 });
 
@@ -210,7 +199,7 @@ export default ShoppingList;
 
 
 /* example data */
-const CONTENT = [
+const STORES = [
     {
       isExpanded: false,
       category_name: 'Safeway (Sawtelle)',
@@ -236,55 +225,44 @@ const CONTENT = [
       category_name: 'Walmart (Sawtelle)',
       items: [{ id: 9, val: 'Strawberry' }],
     },
-    {
-      isExpanded: false,
-      category_name: 'Item 6',
-      items: [{ id: 17, val: 'Sub Cat 17' }, { id: 18, val: 'Sub Cat 8' }],
-    },
-    {
-      isExpanded: false,
-      category_name: 'Item 7',
-      items: [{ id: 20, val: 'Sub Cat 20' }],
-    },
-    {
-      isExpanded: false,
-      category_name: 'Item 8',
-      items: [{ id: 22, val: 'Sub Cat 22' }],
-    },
-    {
-      isExpanded: false,
-      category_name: 'Item 9',
-      items: [{ id: 26, val: 'Sub Cat 26' }, { id: 27, val: 'Sub Cat 7' }],
-    },
-    {
-      isExpanded: false,
-      category_name: 'Item 10',
-      items: [{ id: 28, val: 'Sub Cat 28' }, { id: 30, val: 'Sub Cat 0' }],
-    },
-    {
-      isExpanded: false,
-      category_name: 'Item 11',
-      items: [{ id: 31, val: 'Sub Cat 31' }],
-    },
-    {
-      isExpanded: false,
-      category_name: 'Item 12',
-      items: [{ id: 34, val: 'Sub Cat 34' }],
-    },
-    {
-      isExpanded: false,
-      category_name: 'Item 13',
-      items: [{ id: 38, val: 'Sub Cat 38' }, { id: 39, val: 'Sub Cat 9' }],
-    },
-    {
-      isExpanded: false,
-      category_name: 'Item 14',
-      items: [{ id: 40, val: 'Sub Cat 40' }, { id: 42, val: 'Sub Cat 2' }],
-    },
-    {
-      isExpanded: false,
-      category_name: 'Item 15',
-      items: [{ id: 43, val: 'Sub Cat 43' }, { id: 44, val: 'Sub Cat 44' }],
-    },
   ];
   
+
+  const GROCERY = [
+    {
+        name: 'Avocado',
+        id: '1',
+    },
+    {
+        name: 'Cabbage',
+        id: '2',
+    },
+    {
+        name: 'Egg',
+        id: '3',
+    },
+    {
+        name: 'Oil',
+        id: '4',
+    },
+    {
+        name: 'Milk',
+        id: '5',
+    },
+    {
+        name: 'Dorito',
+        id: '6',
+    },
+    {
+        name: 'Protein Powder',
+        id: '7',
+    },
+    {
+        name: 'Yogurt',
+        id: '8',
+    },
+    {
+        name: 'Strawberry',
+        id: '9',
+    },
+  ]
