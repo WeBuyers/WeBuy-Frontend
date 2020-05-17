@@ -3,12 +3,20 @@ import {StyleSheet, Text, Button, TouchableOpacity, View, FlatList, Alert} from 
 import {Header, Content, Container, Tab, Tabs, TabHeading} from 'native-base';
 import {SwipeListView} from 'react-native-swipe-list-view';
 
-let testData = [
-    { name: 'store 1', key: '1' },
-    { name: 'store 2', key: '2' },
-    { name: 'store 3', key: '3' },
-    { name: 'store 4', key: '4' },
-    { name: 'store 5', key: '5' },
+let storeExamples = [
+    { name: 'Safeway (Sawtelle)', key: '1' },
+    { name: 'Target (Westwood)', key: '2' },
+    { name: 'Whole Food (Westwood)', key: '3' },
+    { name: 'Whole Food (Century City)', key: '4' },
+    { name: 'Walmart (Sawtelle)', key: '5' },
+]
+
+let groceryExamples = [
+    { name: 'Avocado', key: '1' },
+    { name: 'Beef', key: '2' },
+    { name: 'Cabbage', key: '3' },
+    { name: 'Dorito', key: '4' },
+    { name: 'Eggs', key: '5' },
 ]
 
 const onButtonPress = () => Alert.alert('button pressed');
@@ -24,11 +32,11 @@ class ShoppingList extends Component {
                     <Tabs>
                         <Tab heading={ <TabHeading><Text>Planned List</Text></TabHeading>}>                            
                             <FlatList
-                                data={testData}
+                                data={storeExamples}
                                 style={styles.list}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
-                                        style={styles.button}
+                                        style={styles.storeButton}
                                         onPress={onButtonPress}
                                     >
                                          <Text style={styles.text}>{item.name}</Text>
@@ -37,7 +45,18 @@ class ShoppingList extends Component {
                             />
                         </Tab>
                         <Tab heading={<TabHeading><Text>Wish List</Text></TabHeading>}>
-                            <Text style={{fontFamily: 'Jost', fontSize: 18, paddingLeft: 20}}>this is wish list</Text>
+                            <FlatList
+                                data={groceryExamples}
+                                style={styles.list}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        style={styles.groceryButton}
+                                        onPress={onButtonPress}
+                                    >
+                                         <Text style={styles.text}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )}
+                            />
                         </Tab>
                     </Tabs>
                 </Content>
@@ -59,18 +78,26 @@ const styles = StyleSheet.create({
         padding: 0,
         fontSize: 18,
         marginHorizontal: 10,
-        marginTop: 24,
+        marginTop: 0,
     },
-    button: {
+    storeButton: {
         backgroundColor: "#5594FE",
         paddingVertical: 24,
         marginVertical: 10,
-        padding: 10,
-        paddingHorizontal: 25,
+        padding: 0,
+        paddingHorizontal: 0,
+        borderRadius: 10,
+    },
+    groceryButton: {
+        backgroundColor: "lightgreen",
+        paddingVertical: 16,
+        marginVertical: 10,
+        padding: 0,
+        paddingHorizontal: 0,
         borderRadius: 10,
     },
     text: {
-        fontSize: 30,
+        fontSize: 26,
         color: 'white',
         textAlign: 'center',
     }
