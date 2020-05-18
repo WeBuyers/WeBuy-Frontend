@@ -102,26 +102,26 @@ class SearchPage extends Component {
     }
 
     searchItem(item){
-        // this.setState({searched: true});
-        // fetch(`${API_URL}/api/resources/items?Name=${item}`,{
-        //     method: "GET"
-        // })
-        //     .then((response)=>{
-        //         console.log(response.status);
-        //         if(response.status==200){
-        //             return response.json();
-        //         }else{
-        //             alert("cannot fetch search result");
-        //             return null;
-        //         }
-        //     })
-        //     .then((responseData)=>{
-        //         if(responseData && responseData.length!=0){
-        //             console.log(responseData);
-        //             this.setState({searchResult: responseData});
-        //         }
-        //     })
-        //     .catch(error=>console.log(`error--> ${error}`))
+        this.setState({searched: true});
+        fetch(`${API_URL}/search/item?name=${item}&latitude=${this.state.latitude}&longitude=${this.state.longitude}`,{
+            method: "GET"
+        })
+            .then((response)=>{
+                console.log(response.status);
+                if(response.status===200){
+                    return response.json();
+                }else{
+                    alert("cannot fetch search result");
+                    return null;
+                }
+            })
+            .then((responseData)=>{
+                if(responseData && responseData.length!==0){
+                    console.log(responseData);
+                    this.setState({searchResult: responseData});
+                }
+            })
+            .catch(error=>console.log(`error--> ${error}`))
     }
 
     renderDrawer = () => (
@@ -134,42 +134,88 @@ class SearchPage extends Component {
                 alignSelf: "center",
                 color: "white"
             }}>Search Grocery Stores Nearby!</Text>
-            <FlatList data={this.state.stores}
-                      renderItem={({item})=>(
-                          <Card style={{
-                              alignItems: "center",
-                              padding: 30,
-                              height: hp("22%"),
-                              width: wp("47%"),
-                              borderRadius: 25
-                          }}
-                          >
-                              <CardItem cardBody={true}>
-                                  <Button
-                                      title={item.name}
-                                      type="clear"
-                                      size={60}
-                                      onPress={()=>{
-                                          let newStores = this.state.stores;
-                                          for (let i = 0; i < newStores.length; i++) {
-                                              if (item.id === newStores[i].id) {
-                                                  newStores[i].color = "red";
-                                              } else {
-                                                  newStores[i].color = "lightblue";
+            {
+                !this.state.searched ?
+                <FlatList data={this.state.stores}
+                          renderItem={({item})=>(
+                              <Card style={{
+                                  alignItems: "center",
+                                  padding: 30,
+                                  height: hp("22%"),
+                                  width: wp("47%"),
+                                  borderRadius: 25
+                              }}
+                              >
+                                  <CardItem cardBody={true}>
+                                      <Button
+                                          title={item.name}
+                                          type="clear"
+                                          size={60}
+                                          onPress={()=>{
+                                              let newStores = this.state.stores;
+                                              for (let i = 0; i < newStores.length; i++) {
+                                                  if (item.id === newStores[i].id) {
+                                                      newStores[i].color = "red";
+                                                  } else {
+                                                      newStores[i].color = "lightblue";
+                                                  }
                                               }
-                                          }
-                                          console.log(newStores);
-                                          this.setState({stores: newStores});
-                                      }}
-                                  />
-                              </CardItem>
-                              <CardItem>
-                                  <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{item.place}</Text>
-                              </CardItem>
-                          </Card>
-                      )}
-                      horizontal
-            />
+                                              console.log(newStores);
+                                              this.setState({stores: newStores});
+                                          }}
+                                      />
+                                  </CardItem>
+                                  <CardItem>
+                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{item.place}</Text>
+                                  </CardItem>
+                              </Card>
+                          )}
+                          horizontal
+                />
+                :
+                <FlatList data={this.state.searchResult}
+                          renderItem={({item})=>(
+                              <Card style={{
+                                  alignItems: "center",
+                                  padding: 30,
+                                  height: hp("30%"),
+                                  width: wp("47%"),
+                                  borderRadius: 25
+                              }}
+                              >
+                                  <CardItem>
+                                     <Text style={{alignSelf: 'center', fontSize: 16, width:wp("30%")}}>{item.itemname}</Text>
+                                  </CardItem>
+                                  <CardItem cardBody={true}>
+                                      <Thumbnail source={{uri: item.picturelink}} style ={{height: hp("10%"), width: wp("30%"), marginTop: 30}}/>
+                                  </CardItem>
+                                  <CardItem>
+                                      <Button
+                                          title={this.state.stores[item.storeid].name}
+                                          type='clear'
+                                          size={15}
+                                          onPress={()=>{
+                                              let newStores = this.state.stores;
+                                              for (let i = 0; i < newStores.length; i++) {
+                                                  if (item.storeid === i) {
+                                                      newStores[i].color = "red";
+                                                  } else {
+                                                      newStores[i].color = "lightblue";
+                                                  }
+                                              }
+                                              console.log(newStores);
+                                              this.setState({stores: newStores});
+                                          }}
+                                      />
+                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{this.state.stores[item.storeid].name}</Text>
+                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{item.price}</Text>
+                                  </CardItem>
+                              </Card>
+                          )}
+                          horizontal
+                />
+            }
+
         </View>
     )
 
