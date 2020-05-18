@@ -1,12 +1,134 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from "react-native"
+import {StyleSheet, Text, View, LayoutAnimation, ScrollView, TouchableOpacity, FlatList, Alert, UIManager, Platform,} from "react-native";
+import {Header, Content, Container, Tab, Tabs, TabHeading} from 'native-base';
 
-class ShoppingList extends Component {
+
+class ExpandableItemComponent extends Component {
+    //Custom Component for the Expandable List
+    constructor() {
+      super();
+      this.state = {
+        layoutHeight: 0,
+      };
+    }
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.item.isExpanded) {
+        this.setState(() => {
+          return {
+            layoutHeight: null,
+          };
+        });
+      } else {
+        this.setState(() => {
+          return {
+            layoutHeight: 0,
+          };
+        });
+      }
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+      if (this.state.layoutHeight !== nextState.layoutHeight) {
+        return true;
+      }
+      return false;
+    }
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={{paddingTop: 100, alignSelf: 'center'}}>This is ShoppingList page.</Text>
+          <View>
+            {/*Header of the Expandable List Item*/}
+            <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={this.props.onClickFunction}
+                style={styles.header}>
+                <Text style={styles.headerText}>{this.props.item.category_name}</Text>
+            </TouchableOpacity>
+            <View
+                style={{
+                    height: this.state.layoutHeight,
+                    overflow: 'hidden',
+                 }}>
+                {/*Content under the header of the Expandable List Item*/}
+                {this.props.item.items.map((item, key) => (
+                    <TouchableOpacity
+                    key={key}
+                    style={styles.content}
+                    onPress={() => alert('Id: ' + item.id + ' val: ' + item.val)}>
+                    <Text style={styles.contentText}>
+                        {item.val}
+                    </Text>
+                    <View style={styles.separator} />
+                    </TouchableOpacity>
+                ))}
             </View>
+          </View>
+        );
+      }
+    
+}
+    
+
+class ShoppingList extends Component {
+    constructor() {
+        super();
+        this.state = {
+            storeList: STORES,
+            groceryList: GROCERY, 
+        }
+    };
+
+    updateLayout = index => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        const array = [...this.state.storeList];
+        array.map((value, placeindex) =>
+          placeindex === index
+            ? (array[placeindex]['isExpanded'] = !array[placeindex]['isExpanded'])
+            : (array[placeindex]['isExpanded'] = false)
+        );
+        this.setState(() => {
+          return {
+            storeList: array,
+          };
+        });
+      };
+
+    render() {
+        return (
+            <Container style={styles.container}>
+                <Content>
+                    <Header>
+                        <Text style={{fontSize: 18}}>Shopping List</Text>
+                    </Header>
+                    <Tabs>
+                        <Tab heading={ <TabHeading><Text>Current Plan</Text></TabHeading>}>                            
+                            <View style={styles.listContainer}>
+                                <ScrollView>
+                                    {this.state.storeList.map((item, key) => (
+                                        <ExpandableItemComponent
+                                            key={item.category_name}
+                                            onClickFunction={this.updateLayout.bind(this, key)}
+                                            item={item}
+                                        />
+                                    ))}
+                                </ScrollView>
+                            </View>                                                      
+                        </Tab>
+                        <Tab heading={<TabHeading><Text>Wish List</Text></TabHeading>}>
+                            <FlatList
+                                data={this.state.groceryList}
+                                style={styles.listContainer}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        style={styles.wishHeader}
+                                        onPress={() => Alert.alert('hi')}
+                                    >
+                                         <Text style={styles.wishText}>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        </Tab>
+                    </Tabs>
+                </Content>
+            </Container>
         );
     }
 }
@@ -17,8 +139,130 @@ const styles = StyleSheet.create({
         left: 0,
         top: 0,
         bottom: 0,
-        right: 0
-    }
+        right: 0,
+    },
+    listContainer: {
+        flex: 0,
+        paddingTop: 8,
+        backgroundColor: '#fff',
+      },
+      header: {
+        backgroundColor: '#5594FE',
+        paddingVertical: 24,
+        marginVertical: 5,
+        marginHorizontal: 16,
+        borderRadius: 10,
+      },
+      headerText: {
+        fontSize: 26,
+        color: 'white',
+        textAlign: 'center',
+      },
+      wishHeader: {
+        backgroundColor: 'mediumaquamarine',
+        paddingVertical: 20,
+        marginVertical: 5,
+        marginHorizontal: 16,
+        borderRadius: 10,
+      },
+      separator: {
+        height: 0.5,
+        backgroundColor: 'white',
+        width: '95%',
+        marginLeft: 0,
+        marginRight: 0,
+      },
+      content: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        padding: 5,
+        marginVertical: 1,
+        marginLeft: 26,
+        marginRight: 26,
+        borderRadius: 10,
+        backgroundColor: 'lightblue',
+      },
+      contentText: {
+            fontSize: 18,
+            color: 'white',
+            textAlign: 'left',
+      },
+      wishText: {
+        fontSize: 22,
+        color: 'white',
+        textAlign: 'center',
+      }
 });
 
 export default ShoppingList;
+
+
+
+/* example data */
+const STORES = [
+    {
+      isExpanded: false,
+      category_name: 'Safeway (Sawtelle)',
+      items: [{ id: 1, val: 'Avocado' }, { id: 3, val: 'Egg' }, {id: 5, val: 'Milk'}],
+    },
+    {
+      isExpanded: false,
+      category_name: 'Target (Westwood)',
+      items: [{ id: 4, val: 'Oil' }, { id: 1, val: 'Avocado' }],
+    },
+    {
+      isExpanded: false,
+      category_name: 'Whole Food (Westwood)',
+      items: [{ id: 7, val: 'Protein Powder' }],
+    },
+    {
+      isExpanded: false,
+      category_name: 'Whole Food (Century City)',
+      items: [{ id: 8, val: 'Yogurt' }, { id: 2, val: 'Cabbage' },{ id: 6, val: 'Dorito' }],
+    },
+    {
+      isExpanded: false,
+      category_name: 'Walmart (Sawtelle)',
+      items: [{ id: 9, val: 'Strawberry' }],
+    },
+  ];
+  
+
+  const GROCERY = [
+    {
+        name: 'Avocado',
+        id: '1',
+    },
+    {
+        name: 'Cabbage',
+        id: '2',
+    },
+    {
+        name: 'Egg',
+        id: '3',
+    },
+    {
+        name: 'Oil',
+        id: '4',
+    },
+    {
+        name: 'Milk',
+        id: '5',
+    },
+    {
+        name: 'Dorito',
+        id: '6',
+    },
+    {
+        name: 'Protein Powder',
+        id: '7',
+    },
+    {
+        name: 'Yogurt',
+        id: '8',
+    },
+    {
+        name: 'Strawberry',
+        id: '9',
+    },
+  ]

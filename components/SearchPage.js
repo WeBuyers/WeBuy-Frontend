@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, Item, Input, Container, Content, Card, CardItem, Right, Thumbnail} from 'native-base';
-import {Button, Icon} from "react-native-elements"
+import {Button, Icon, Overlay, ListItem} from "react-native-elements"
 import {View, StyleSheet, FlatList, ScrollView} from "react-native"
 import MapView from "react-native-maps";
 import {Marker, AnimatedRegion} from "react-native-maps";
@@ -10,13 +10,18 @@ import {PLACE_API, API_KEY, API_URL} from "../constant"
 import BottomSheet from "reanimated-bottom-sheet"
 
 class SearchPage extends Component {
-    state={
-        latitude: 0.0,
-        longitude: 0.0,
-        searchItem: "",
-        stores: [],
-        searchResult: [],
-        searched: false
+    constructor(props) {
+        super(props);
+        this.state ={
+            latitude: 0.0,
+            longitude: 0.0,
+            searchItem: "",
+            stores: [],
+            searchResult: [],
+            searched: false,
+            modelvis: false
+        }
+        this.BottomRef = React.createRef();
     }
 
 
@@ -29,7 +34,7 @@ class SearchPage extends Component {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                 });
-                fetch(`${PLACE_API}/json?key=${API_KEY}&location=${position.coords.latitude},${position.coords.longitude}&radius=800&type=supermarket,grocery_or_supermarket`,{
+                fetch(`${PLACE_API}/json?key=${API_KEY}&location=${position.coords.latitude},${position.coords.longitude}&radius=800&type=supermarket`,{
                     method: "GET"
                 })
                     .then((response)=>{
@@ -97,26 +102,26 @@ class SearchPage extends Component {
     }
 
     searchItem(item){
-        // this.setState({searched: true});
-        // fetch(`${API_URL}/api/resources/items?Name=${item}`,{
-        //     method: "GET"
-        // })
-        //     .then((response)=>{
-        //         console.log(response.status);
-        //         if(response.status==200){
-        //             return response.json();
-        //         }else{
-        //             alert("cannot fetch search result");
-        //             return null;
-        //         }
-        //     })
-        //     .then((responseData)=>{
-        //         if(responseData && responseData.length!=0){
-        //             console.log(responseData);
-        //             this.setState({searchResult: responseData});
-        //         }
-        //     })
-        //     .catch(error=>console.log(`error--> ${error}`))
+        this.setState({searched: true});
+        fetch(`${API_URL}/search/item?name=${item}&latitude=${this.state.latitude}&longitude=${this.state.longitude}`,{
+            method: "GET"
+        })
+            .then((response)=>{
+                console.log(response.status);
+                if(response.status===200){
+                    return response.json();
+                }else{
+                    alert("cannot fetch search result");
+                    return null;
+                }
+            })
+            .then((responseData)=>{
+                if(responseData && responseData.length!==0){
+                    console.log(responseData);
+                    this.setState({searchResult: responseData});
+                }
+            })
+            .catch(error=>console.log(`error--> ${error}`))
     }
 
     renderDrawer = () => (
@@ -129,31 +134,88 @@ class SearchPage extends Component {
                 alignSelf: "center",
                 color: "white"
             }}>Search Grocery Stores Nearby!</Text>
-            <FlatList data={this.state.stores}
-                      renderItem={({item})=>(
-                          <Card style={{
-                              alignItems: "center",
-                              padding: 30,
-                              height: hp("22%"),
-                              width: wp("47%"),
-                              borderRadius: 25
-                          }}
-                          >
-                              <CardItem>
-                                  <Button
-                                      title={item.name}
-                                      color="lightblue"
-                                      size={50}
-                                      raised={true}
-                                  />
-                              </CardItem>
-                              <CardItem>
-                                  <Text style={{fontFamily: "Ubuntu-Regular"}}>{item.place}</Text>
-                              </CardItem>
-                          </Card>
-                      )}
-                      horizontal
-            />
+            {
+                !this.state.searched ?
+                <FlatList data={this.state.stores}
+                          renderItem={({item})=>(
+                              <Card style={{
+                                  alignItems: "center",
+                                  padding: 30,
+                                  height: hp("22%"),
+                                  width: wp("47%"),
+                                  borderRadius: 25
+                              }}
+                              >
+                                  <CardItem cardBody={true}>
+                                      <Button
+                                          title={item.name}
+                                          type="clear"
+                                          size={60}
+                                          onPress={()=>{
+                                              let newStores = this.state.stores;
+                                              for (let i = 0; i < newStores.length; i++) {
+                                                  if (item.id === newStores[i].id) {
+                                                      newStores[i].color = "red";
+                                                  } else {
+                                                      newStores[i].color = "lightblue";
+                                                  }
+                                              }
+                                              console.log(newStores);
+                                              this.setState({stores: newStores});
+                                          }}
+                                      />
+                                  </CardItem>
+                                  <CardItem>
+                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{item.place}</Text>
+                                  </CardItem>
+                              </Card>
+                          )}
+                          horizontal
+                />
+                :
+                <FlatList data={this.state.searchResult}
+                          renderItem={({item})=>(
+                              <Card style={{
+                                  alignItems: "center",
+                                  padding: 30,
+                                  height: hp("30%"),
+                                  width: wp("47%"),
+                                  borderRadius: 25
+                              }}
+                              >
+                                  <CardItem>
+                                     <Text style={{alignSelf: 'center', fontSize: 16, width:wp("30%")}}>{item.itemname}</Text>
+                                  </CardItem>
+                                  <CardItem cardBody={true}>
+                                      <Thumbnail source={{uri: item.picturelink}} style ={{height: hp("10%"), width: wp("30%"), marginTop: 30}}/>
+                                  </CardItem>
+                                  <CardItem>
+                                      <Button
+                                          title={this.state.stores[item.storeid].name}
+                                          type='clear'
+                                          size={15}
+                                          onPress={()=>{
+                                              let newStores = this.state.stores;
+                                              for (let i = 0; i < newStores.length; i++) {
+                                                  if (item.storeid === i) {
+                                                      newStores[i].color = "red";
+                                                  } else {
+                                                      newStores[i].color = "lightblue";
+                                                  }
+                                              }
+                                              console.log(newStores);
+                                              this.setState({stores: newStores});
+                                          }}
+                                      />
+                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{this.state.stores[item.storeid].name}</Text>
+                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{item.price}</Text>
+                                  </CardItem>
+                              </Card>
+                          )}
+                          horizontal
+                />
+            }
+
         </View>
     )
 
@@ -210,23 +272,21 @@ class SearchPage extends Component {
                         containerStyle={styles.autocompleteContainer}
                         listStyle={{borderColor: "transparent", backgroundColor: "transparent"}}
                         inputContainerStyle={{width: wp("65%"), borderColor: "white"}}
-                        listContainerStyle={{width: wp("65%"), backgroundColor: "transparent", elevation:1, borderColor: "transparent"}}
+                        listContainerStyle={{width: wp("65%"), backgroundColor: "transparent", elevation:1, borderColor: "transparent", marginTop: 5}}
                         renderItem={({item})=>(
                             <Item rounded style={{alignItems: 'center',
-                                borderRadius: 10,
+                                borderRadius: 3,
                                 height: hp("5%"),
                                 backgroundColor: '#fefefe',
-                                paddingBottom: 10,
-                                paddingTop: 5,
-                                marginTop: 10,
-                                justifyContent: "center"
+                                borderColor: "lightgrey",
+                                flex: 1
                             }}
                                   onPress={() => {
                                       this.setState({ searchItem: item });
 
                                   }}
                             >
-                                <Text>
+                                <Text style={{fontFamily: 'Jost', fontSize: 15, paddingLeft: 10}}>
                                     {item}
                                 </Text>
                             </Item>
@@ -242,6 +302,7 @@ class SearchPage extends Component {
                             }}
                             size={15}
                             onPress={()=>{
+                                this.BottomRef.current.snapTo(1)
                                 this.searchItem(this.state.searchItem)
                             }}
                     />
@@ -264,14 +325,26 @@ class SearchPage extends Component {
                         borderRadius: 100,
                         shadowRadius: 30
                     }}
+                    onPress={()=>{this.setState({modelvis: !this.state.modelvis})}}
                 />
 
+
+
                 <BottomSheet
-                    snapPoints={[700, 250]}
+                    snapPoints={[700, 400, 100]}
                     initialSnap={1}
+                    ref = {this.BottomRef}
                     renderContent={this.renderDrawer}
                     borderRadius={20}
                 />
+
+                <Overlay isVisible={this.state.modelvis} onBackdropPress={()=>{this.setState({modelvis: !this.state.modelvis})}}>
+                    <Text style={{fontSize: 18, alignSelf: 'center', paddingTop: 10}}> Import Your Wish List </Text>
+                    <View style={styles.modelContainer}>
+                        <Text> Here is some wish lists</Text>
+                    </View>
+                    <Button type="solid" size={30} title="Confirm"/>
+                </Overlay>
 
 
                 {/*<View style={{marginTop: hp("65%")}}>*/}
@@ -390,6 +463,11 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 10,
     },
+    modelContainer: {
+        height: hp("40%"),
+        width: wp("70%"),
+        padding: 20
+    }
 });
 
 export default SearchPage;
