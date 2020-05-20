@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, LayoutAnimation, ScrollView, TouchableOpacity, FlatList, Alert, UIManager, Platform,} from "react-native";
-import {Header, Content, Container, Tab, Tabs, TabHeading, Item, Input, Icon, Button} from 'native-base';
+import {Header, Content, Container, Tab, Tabs, TabHeading, Item, Input, Icon, Button, Row, Right, Body} from 'native-base';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 
 class ExpandableItemComponent extends Component {
@@ -49,15 +49,16 @@ class ExpandableItemComponent extends Component {
                  }}>
                 {/*Content under the header of the Expandable List Item*/}
                 {this.props.item.items.map((item, key) => (
-                    <TouchableOpacity
-                    key={key}
-                    style={styles.content}
-                    onPress={() => alert('Id: ' + item.id + ' val: ' + item.val)}>
-                    <Text style={styles.contentText}>
-                        {item.val}
-                    </Text>
-                    <View style={styles.separator} />
-                    </TouchableOpacity>
+
+                        <TouchableOpacity
+                        key={key}
+                        style={styles.content}
+                        onPress={() => alert('Id: ' + item.id + ' val: ' + item.val)}>
+                        <Text style={styles.contentText}>
+                            {item.val}
+                        </Text>
+                        <View style={styles.separator} />
+                        </TouchableOpacity>
                 ))}
             </View>
           </View>
@@ -181,7 +182,22 @@ class ShoppingList extends Component {
                                     <TouchableOpacity
                                         style={styles.wishHeader}
                                     >
-                                         <Text style={styles.wishText}>{item.name}</Text>
+                                        <Row>
+                                            <Body>
+                                                <Text style={styles.wishText}>{item.name}</Text>
+                                            </Body>
+                                            <Right>
+                                                <Button
+                                                    style={{backgroundColor:'red', width: 50, height: 60}}
+                                                    onPress={()=>{
+                                                        let list = this.state.groceryList.filter(element=>element.name!==item.name);
+                                                        this.setState({groceryList: list});
+                                                    }}
+                                                >
+                                                    <Icon name="trash"/>
+                                                </Button>
+                                            </Right>
+                                        </Row>
                                     </TouchableOpacity>
                                 )}
                             />
@@ -220,7 +236,6 @@ const styles = StyleSheet.create({
       },
       wishHeader: {
         backgroundColor: 'mediumaquamarine',
-        paddingVertical: 10,
         marginVertical: 5,
         marginHorizontal: 16,
         borderRadius: 10,
@@ -248,9 +263,10 @@ const styles = StyleSheet.create({
             textAlign: 'left',
       },
       wishText: {
-        fontSize: 22,
-        color: 'white',
-        textAlign: 'center',
+            fontSize: 22,
+            color: 'white',
+            textAlign: 'center',
+          marginLeft: 20
       }
 });
 
