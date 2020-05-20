@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, LayoutAnimation, ScrollView, TouchableOpacity, FlatList, Alert, UIManager, Platform,} from "react-native";
-import {Header, Content, Container, Tab, Tabs, TabHeading} from 'native-base';
-
+import {Header, Content, Container, Tab, Tabs, TabHeading, Item, Input, Icon, Button} from 'native-base';
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 
 class ExpandableItemComponent extends Component {
     //Custom Component for the Expandable List
@@ -65,14 +65,53 @@ class ExpandableItemComponent extends Component {
       }
     
 }
-    
+
+let GROCERY = [
+    {
+        name: 'Avocado',
+        id: '1',
+    },
+    {
+        name: 'Cabbage',
+        id: '2',
+    },
+    {
+        name: 'Egg',
+        id: '3',
+    },
+    {
+        name: 'Oil',
+        id: '4',
+    },
+    {
+        name: 'Milk',
+        id: '5',
+    },
+    {
+        name: 'Dorito',
+        id: '6',
+    },
+    {
+        name: 'Protein Powder',
+        id: '7',
+    },
+    {
+        name: 'Yogurt',
+        id: '8',
+    },
+    {
+        name: 'Strawberry',
+        id: '9',
+    },
+]
 
 class ShoppingList extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             storeList: STORES,
-            groceryList: GROCERY, 
+            groceryList: GROCERY,
+            addItem: "",
         }
     };
 
@@ -113,13 +152,34 @@ class ShoppingList extends Component {
                             </View>                                                      
                         </Tab>
                         <Tab heading={<TabHeading><Text>Wish List</Text></TabHeading>}>
+                            <Item rounded={true} style={{width: wp("90%"), alignSelf: "center", marginTop: 15, marginBottom: 15}}>
+                                <Icon name="search"/>
+                                <Input placeholder="Add to Wishlist..."
+                                       value={this.state.addItem}
+                                       onChangeText={(text)=>{this.setState({addItem: text})}}
+                                       style={{width: wp("50%")}}/>
+                                <Button
+                                    transparent={true}
+                                    onPress={()=>{
+                                        if(this.state.addItem.length!==0){
+                                            let list = this.state.groceryList;
+                                            let itemId =list.length+1;
+                                            list.push({name: this.state.addItem, id: itemId});
+                                            this.setState({groceryList: list, addItem: ""});
+                                        }else{
+                                            alert("please enter item name");
+                                        }
+                                    }}
+                                >
+                                    <Icon name="add"/>
+                                </Button>
+                            </Item>
                             <FlatList
                                 data={this.state.groceryList}
                                 style={styles.listContainer}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity
                                         style={styles.wishHeader}
-                                        onPress={() => Alert.alert('hi')}
                                     >
                                          <Text style={styles.wishText}>{item.name}</Text>
                                     </TouchableOpacity>
@@ -160,7 +220,7 @@ const styles = StyleSheet.create({
       },
       wishHeader: {
         backgroundColor: 'mediumaquamarine',
-        paddingVertical: 20,
+        paddingVertical: 10,
         marginVertical: 5,
         marginHorizontal: 16,
         borderRadius: 10,
@@ -228,41 +288,3 @@ const STORES = [
   ];
   
 
-  const GROCERY = [
-    {
-        name: 'Avocado',
-        id: '1',
-    },
-    {
-        name: 'Cabbage',
-        id: '2',
-    },
-    {
-        name: 'Egg',
-        id: '3',
-    },
-    {
-        name: 'Oil',
-        id: '4',
-    },
-    {
-        name: 'Milk',
-        id: '5',
-    },
-    {
-        name: 'Dorito',
-        id: '6',
-    },
-    {
-        name: 'Protein Powder',
-        id: '7',
-    },
-    {
-        name: 'Yogurt',
-        id: '8',
-    },
-    {
-        name: 'Strawberry',
-        id: '9',
-    },
-  ]

@@ -56,7 +56,7 @@ class Login extends Component {
         })
             .then((response) => {
                 console.log(response.status);
-                if (response.status == "200") {
+                if (response.status === 200) {
                     return response.json();
                 } else {
                     Toast.show({
