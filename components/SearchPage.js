@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Text, Item, Input, Container, Content, Card, CardItem, Right, Thumbnail} from 'native-base';
-import {Button, Icon, Overlay, ListItem} from "react-native-elements"
-import {View, StyleSheet, FlatList, ScrollView} from "react-native"
+import {Text, Item, Input, Container, Content, Card, CardItem, Right, Thumbnail, Row} from 'native-base';
+import {Button, Icon, Overlay, ListItem, CheckBox} from "react-native-elements"
+import {View, StyleSheet, FlatList, ScrollView, TouchableHighlight} from "react-native"
 import MapView from "react-native-maps";
 import {Marker, AnimatedRegion} from "react-native-maps";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen"
@@ -19,7 +19,34 @@ class SearchPage extends Component {
             stores: [],
             searchResult: [],
             searched: false,
-            modelvis: false
+            modelvis: false,
+            data: [
+                {
+                    check: false,
+                    category_name: 'Safeway (Sawtelle)',
+                    items: [{ id: 1, val: 'Avocado' }, { id: 3, val: 'Egg' }, {id: 5, val: 'Milk'}],
+                },
+                {
+                    check: false,
+                    category_name: 'Target (Westwood)',
+                    items: [{ id: 4, val: 'Oil' }, { id: 1, val: 'Avocado' }],
+                },
+                {
+                    check: false,
+                    category_name: 'Whole Food (Westwood)',
+                    items: [{ id: 7, val: 'Protein Powder' }],
+                },
+                {
+                    check: false,
+                    category_name: 'Whole Food (Century City)',
+                    items: [{ id: 8, val: 'Yogurt' }, { id: 2, val: 'Cabbage' },{ id: 6, val: 'Dorito' }],
+                },
+                {
+                    check: false,
+                    category_name: 'Walmart (Sawtelle)',
+                    items: [{ id: 9, val: 'Strawberry' }],
+                },
+            ]
         }
         this.BottomRef = React.createRef();
     }
@@ -341,100 +368,34 @@ class SearchPage extends Component {
                 <Overlay isVisible={this.state.modelvis} onBackdropPress={()=>{this.setState({modelvis: !this.state.modelvis})}}>
                     <Text style={{fontSize: 18, alignSelf: 'center', paddingTop: 10}}> Import Your Wish List </Text>
                     <View style={styles.modelContainer}>
-                        <Text> Here is some wish lists</Text>
+                        <FlatList data={this.state.data}
+                                  renderItem={({item})=>(
+                                      <TouchableHighlight style={{padding: 10, width: wp("70%")}}>
+                                          <Row>
+                                              <Text>{item.category_name}</Text>
+                                              <Right>
+                                                  <CheckBox checked={item.check}
+                                                            wrapperStyle={{marginVertical: 5}}
+                                                            onPress={()=>{
+                                                                let array = this.state.data;
+                                                                for(let i = 0; i < array.length; i++){
+                                                                    if(array[i].category_name===item.category_name){
+                                                                        array[i].check = !array[i].check;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                this.setState({data: array});
+                                                            }}/>
+                                              </Right>
+                                          </Row>
+                                      </TouchableHighlight>
+                                  )}/>
                     </View>
-                    <Button type="solid" size={30} title="Confirm"/>
+                    <Button type="solid" size={30} title="Confirm" onPress={()=>{
+                        this.setState({modelvis: !this.state.modelvis})
+                    }}/>
                 </Overlay>
 
-
-                {/*<View style={{marginTop: hp("65%")}}>*/}
-                {/*    {*/}
-                {/*        this.state.searched?*/}
-                {/*            <FlatList*/}
-                {/*                data={this.state.searchResult}*/}
-                {/*                renderItem={({item})=>(*/}
-                {/*                    <Card style={{*/}
-                {/*                        alignItems: 'center',*/}
-                {/*                        paddingTop: 30,*/}
-                {/*                        paddingRight: 10,*/}
-                {/*                        height: hp("22%"),*/}
-                {/*                        width: wp("47%"),*/}
-                {/*                        borderRadius: 25*/}
-                {/*                    }}*/}
-                {/*                    >*/}
-                {/*                        <CardItem cardBody style={{alignItems: 'center'}}>*/}
-                {/*                            <Button transparent style={{alignItems: 'center'}}*/}
-                {/*                                    onPress={()=>{*/}
-                {/*                                        let newStores = this.state.stores;*/}
-                {/*                                        for (let i = 0; i < newStores.length; i++) {*/}
-                {/*                                            if (item.LocationID == newStores[i].id) {*/}
-                {/*                                                newStores[i].color = "red";*/}
-                {/*                                            } else {*/}
-                {/*                                                newStores[i].color = "lightblue";*/}
-                {/*                                            }*/}
-                {/*                                        }*/}
-                {/*                                        this.setState({stores: newStores});*/}
-                {/*                                    }}*/}
-                {/*                            >*/}
-                {/*                                <Thumbnail source={avocado} style ={{height: hp("15%"), width: wp("25%"), marginTop: 30}}/>*/}
-                {/*                            </Button>*/}
-                {/*                        </CardItem>*/}
-                {/*                        <CardItem>*/}
-                {/*                            <Text style={{fontSize: 13}}>{item.Name}</Text>*/}
-                {/*                            <Text style={{fontSize: 13, fontWeight: "bold"}}>{item.Price}</Text>*/}
-                {/*                        </CardItem>*/}
-                {/*                    </Card>*/}
-                {/*                )}*/}
-                {/*                horizontal*/}
-                {/*            />*/}
-                {/*            :*/}
-                {/*            <FlatList*/}
-                {/*                data={this.state.stores}*/}
-                {/*                renderItem={({item}) => (*/}
-                {/*                    <Card style={{*/}
-                {/*                        alignItems: 'center',*/}
-                {/*                        paddingTop: 30,*/}
-                {/*                        paddingRight: 10,*/}
-                {/*                        height: hp("22%"),*/}
-                {/*                        width: wp("47%"),*/}
-                {/*                        borderRadius: 25*/}
-                {/*                    }} key={item.id}>*/}
-                {/*                        <CardItem cardBody style={{alignItems: 'center'}}>*/}
-                {/*                            <Button*/}
-
-                {/*                                transparent style={{margin: 10}}*/}
-                {/*                                onPress={() => {*/}
-                {/*                                    let newStores = this.state.stores;*/}
-                {/*                                    for (let i = 0; i < newStores.length; i++) {*/}
-                {/*                                        if (item.id == newStores[i].id) {*/}
-                {/*                                            newStores[i].color = "red";*/}
-                {/*                                        } else {*/}
-                {/*                                            newStores[i].color = "lightblue";*/}
-                {/*                                        }*/}
-                {/*                                    }*/}
-                {/*                                    this.setState({stores: newStores});*/}
-
-                {/*                                }}*/}
-                {/*                            >*/}
-
-                {/*                                <Thumbnail source={supermarket} style ={{height: hp("10%"), width: wp("30%"), marginTop: 30}}/>*/}
-                {/*                            </Button>*/}
-                {/*                        </CardItem>*/}
-                {/*                        <CardItem style={{marginTop: 20, backgroundColor: 'transparent'}}>*/}
-                {/*                            <Text style={{*/}
-                {/*                                fontWeight: "bold",*/}
-                {/*                                fontSize: 13,*/}
-                {/*                                paddingTop: 5,*/}
-                {/*                                textAlign: 'center',*/}
-                {/*                                width: 190*/}
-                {/*                            }}>{item.name}</Text>*/}
-                {/*                        </CardItem>*/}
-                {/*                    </Card>*/}
-                {/*                )}*/}
-                {/*                horizontal*/}
-                {/*            />*/}
-                {/*    }*/}
-                {/*</View>*/}
 
             </View>
 
@@ -469,5 +430,6 @@ const styles = StyleSheet.create({
         padding: 20
     }
 });
+
 
 export default SearchPage;
