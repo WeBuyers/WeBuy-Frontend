@@ -115,6 +115,8 @@ class SearchPage extends Component {
             "Fish",
             "Granola",
             "Hash Browns",
+            "Paper",
+            "juice"
         ];
         let filtered = trucks.filter((item)=>{
             return item.toLowerCase().match(text);
@@ -234,7 +236,6 @@ class SearchPage extends Component {
                                               this.setState({stores: newStores});
                                           }}
                                       />
-                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{this.state.stores[item.storeid].name}</Text>
                                       <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{item.price}</Text>
                                   </CardItem>
                               </Card>
