@@ -8,6 +8,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-nativ
 import Autocomplete from "react-native-autocomplete-input"
 import {PLACE_API, API_KEY, API_URL} from "../constant"
 import BottomSheet from "reanimated-bottom-sheet"
+import store from "../stores"
 
 class SearchPage extends Component {
     constructor(props) {
@@ -101,6 +102,7 @@ class SearchPage extends Component {
     }
     componentDidMount() {
         this.findCoordinate();
+
     }
 
     findItem(query){
@@ -161,7 +163,7 @@ class SearchPage extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                user_id: 0,
+                user_id: store.getState().user_id,
                 item_id: item.id
             }),
         })

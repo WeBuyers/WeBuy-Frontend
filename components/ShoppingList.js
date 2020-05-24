@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, LayoutAnimation, ScrollView, TouchableOpacity, F
 import {Header, Content, Container, Tab, Tabs, TabHeading, Item, Input, Icon, Button, Row, Right, Body} from 'native-base';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 import {API_URL} from "../constant"
+import store from "../stores"
 
 class ExpandableItemComponent extends Component {
     //Custom Component for the Expandable List
@@ -133,7 +134,7 @@ class ShoppingList extends Component {
       };
 
     async componentDidMount() {
-        await fetch(`${API_URL}/wishlist/listall?user_id=0`, {
+        await fetch(`${API_URL}/wishlist/listall?user_id=${store.getState().user_id}`, {
             method: 'GET',
         }).then((response)=>{
             return response.json();
