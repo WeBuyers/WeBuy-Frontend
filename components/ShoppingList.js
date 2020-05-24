@@ -146,6 +146,26 @@ class ShoppingList extends Component {
             .catch(error=>{console.log(`Unable to fetch wishlist --> ${error}`)})
     }
 
+    handleDelete(item){
+        fetch(`${API_URL}/wishlist/deleteitem`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: store.getState().user_id,
+                item_id: item.id
+            }),
+        }).then((response)=>{
+            if(response.status===204){
+                console.log("delete successfully!")
+            }else{
+                console.log("not in the wishlist");
+            }
+        }).catch(error=>{`Error --> ${error}`});
+    }
+
     render() {
         return (
             <Container style={styles.container}>
@@ -199,14 +219,15 @@ class ShoppingList extends Component {
                                     >
                                         <Row>
                                             <Body style={{width: wp("60%")}}>
-                                                <Text style={styles.wishText}>{item}</Text>
+                                                <Text style={styles.wishText}>{item.name}</Text>
                                             </Body>
                                             <Right>
                                                 <Button
                                                     style={{backgroundColor:'red', width: 50, height: 60}}
                                                     onPress={()=>{
-                                                        let list = this.state.groceryList.filter(element=>element.name!==item);
+                                                        let list = this.state.groceryList.filter(element=>element.name!==item.name);
                                                         this.setState({groceryList: list});
+                                                        this.handleDelete(item);
                                                     }}
                                                 >
                                                     <Icon name="trash"/>
