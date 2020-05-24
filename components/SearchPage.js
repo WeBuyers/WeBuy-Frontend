@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, Item, Input, Container, Content, Card, CardItem, Right, Thumbnail, Row} from 'native-base';
+import {Text, Item, Input, Container, Content, Card, CardItem, Right, Thumbnail, Row, Body} from 'native-base';
 import {Button, Icon, Overlay, ListItem, CheckBox} from "react-native-elements"
 import {View, StyleSheet, FlatList, ScrollView, TouchableHighlight} from "react-native"
 import MapView from "react-native-maps";
@@ -9,6 +9,8 @@ import Autocomplete from "react-native-autocomplete-input"
 import {PLACE_API, API_KEY, API_URL} from "../constant"
 import BottomSheet from "reanimated-bottom-sheet"
 import store from "../stores"
+import {importWishlist} from "../actions/WishlistAction"
+import {connect} from "react-redux"
 
 class SearchPage extends Component {
     constructor(props) {
@@ -21,33 +23,7 @@ class SearchPage extends Component {
             searchResult: [],
             searched: false,
             modelvis: false,
-            data: [
-                {
-                    check: false,
-                    category_name: 'Safeway (Sawtelle)',
-                    items: [{ id: 1, val: 'Avocado' }, { id: 3, val: 'Egg' }, {id: 5, val: 'Milk'}],
-                },
-                {
-                    check: false,
-                    category_name: 'Target (Westwood)',
-                    items: [{ id: 4, val: 'Oil' }, { id: 1, val: 'Avocado' }],
-                },
-                {
-                    check: false,
-                    category_name: 'Whole Food (Westwood)',
-                    items: [{ id: 7, val: 'Protein Powder' }],
-                },
-                {
-                    check: false,
-                    category_name: 'Whole Food (Century City)',
-                    items: [{ id: 8, val: 'Yogurt' }, { id: 2, val: 'Cabbage' },{ id: 6, val: 'Dorito' }],
-                },
-                {
-                    check: false,
-                    category_name: 'Walmart (Sawtelle)',
-                    items: [{ id: 9, val: 'Strawberry' }],
-                },
-            ]
+            data: []
         }
         this.BottomRef = React.createRef();
     }
@@ -102,6 +78,21 @@ class SearchPage extends Component {
     }
     componentDidMount() {
         this.findCoordinate();
+        fetch(`${API_URL}/wishlist/listall?user_id=${store.getState().login.user_id}`, {
+            method: 'GET',
+        }).then((response)=>{
+            return response.json();
+        })
+            .then(responseData=>{
+                console.log(JSON.stringify(responseData));
+               this.props.importWishlist(responseData);
+                let newData = responseData;
+                newData.forEach(element => {
+                    element.check = false;
+                });
+                this.setState({data: newData});
+            })
+            .catch(error=>{console.log(`Unable to fetch wishlist --> ${error}`)})
 
     }
 
@@ -410,14 +401,16 @@ class SearchPage extends Component {
                                   renderItem={({item})=>(
                                       <TouchableHighlight style={{padding: 10, width: wp("70%")}}>
                                           <Row>
-                                              <Text>{item.category_name}</Text>
+                                              <Body>
+                                                  <Text style={{fontSize: 15}}>{item.name}</Text>
+                                              </Body>
                                               <Right>
                                                   <CheckBox checked={item.check}
                                                             wrapperStyle={{marginVertical: 5}}
                                                             onPress={()=>{
                                                                 let array = this.state.data;
                                                                 for(let i = 0; i < array.length; i++){
-                                                                    if(array[i].category_name===item.category_name){
+                                                                    if(array[i].name===item.name){
                                                                         array[i].check = !array[i].check;
                                                                         break;
                                                                     }
@@ -470,4 +463,6 @@ const styles = StyleSheet.create({
 });
 
 
-export default SearchPage;
+export default connect(state => ({
+    wishlist: state.wishlist.wishlist
+}), {importWishlist})(SearchPage);

@@ -43,6 +43,7 @@ class Login extends Component {
     }
 
     async loginHandler(){
+        console.log(this.props.username);
         return fetch(`${API_URL}/auth/login`,{
             method: 'POST',
             headers: {
@@ -199,6 +200,6 @@ class Login extends Component {
 }
 
 export default connect(state => ({
-    username: state.username,
-    password: state.password
+    username: state.login.username,
+    password: state.login.password
 }), {setUsername, setPassword, setToken, setId})(Login);

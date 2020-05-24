@@ -69,51 +69,14 @@ class ExpandableItemComponent extends Component {
     
 }
 
-let GROCERY = [
-    {
-        name: 'Avocado',
-        id: '1',
-    },
-    {
-        name: 'Cabbage',
-        id: '2',
-    },
-    {
-        name: 'Egg',
-        id: '3',
-    },
-    {
-        name: 'Oil',
-        id: '4',
-    },
-    {
-        name: 'Milk',
-        id: '5',
-    },
-    {
-        name: 'Dorito',
-        id: '6',
-    },
-    {
-        name: 'Protein Powder',
-        id: '7',
-    },
-    {
-        name: 'Yogurt',
-        id: '8',
-    },
-    {
-        name: 'Strawberry',
-        id: '9',
-    },
-]
+
 
 class ShoppingList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             storeList: STORES,
-            groceryList: [],
+            groceryList: store.getState().wishlist.wishlist,
             addItem: "",
         }
     };
@@ -134,7 +97,7 @@ class ShoppingList extends Component {
       };
 
     async componentDidMount() {
-        await fetch(`${API_URL}/wishlist/listall?user_id=${store.getState().user_id}`, {
+        await fetch(`${API_URL}/wishlist/listall?user_id=${store.getState().login.user_id}`, {
             method: 'GET',
         }).then((response)=>{
             return response.json();
