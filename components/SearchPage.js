@@ -153,6 +153,28 @@ class SearchPage extends Component {
             .catch(error=>console.log(`error--> ${error}`))
     }
 
+    additem(item){
+        fetch(`${API_URL}/wishlist/additem`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: 0,
+                item_id: item.id
+            }),
+        })
+            .then((response)=>{
+                if(response.status===200){
+                    alert("Item is successfully added to your wishlist!");
+                }else{
+                    alert("Item has already in your wishlist!");
+                }
+            }).catch(error => {console.log(`Error in add item api --> ${error}`)});
+
+    }
+
     renderDrawer = () => (
         <View style={{backgroundColor: '#5594FE', height: hp("70%")}}>
             <Text style={{
@@ -207,7 +229,7 @@ class SearchPage extends Component {
                               <Card style={{
                                   alignItems: "center",
                                   padding: 30,
-                                  height: hp("30%"),
+                                  height: hp("40%"),
                                   width: wp("47%"),
                                   borderRadius: 25
                               }}
@@ -236,7 +258,20 @@ class SearchPage extends Component {
                                               this.setState({stores: newStores});
                                           }}
                                       />
-                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{item.price}</Text>
+                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>$ {item.price}</Text>
+                                  </CardItem>
+                                  <CardItem>
+                                      <Button
+                                          type="solid"
+                                          icon={<Icon name='add' size={15} color="lightblue"/>}
+                                          size={30}
+                                          buttonStyle={{
+                                              height: 30,
+                                              width: 30,
+                                              borderRadius: 50,
+                                          }}
+                                          onPress={()=>{this.additem(item)}}
+                                          />
                                   </CardItem>
                               </Card>
                           )}

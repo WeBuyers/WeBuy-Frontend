@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View, LayoutAnimation, ScrollView, TouchableOpacity, FlatList, Alert, UIManager, Platform,} from "react-native";
 import {Header, Content, Container, Tab, Tabs, TabHeading, Item, Input, Icon, Button, Row, Right, Body} from 'native-base';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
+import {API_URL} from "../constant"
 
 class ExpandableItemComponent extends Component {
     //Custom Component for the Expandable List
@@ -111,7 +112,7 @@ class ShoppingList extends Component {
         super(props);
         this.state = {
             storeList: STORES,
-            groceryList: GROCERY,
+            groceryList: [],
             addItem: "",
         }
     };
@@ -130,6 +131,19 @@ class ShoppingList extends Component {
           };
         });
       };
+
+    async componentDidMount() {
+        await fetch(`${API_URL}/wishlist/listall?user_id=0`, {
+            method: 'GET',
+        }).then((response)=>{
+            return response.json();
+        })
+            .then(responseData=>{
+                console.log(JSON.stringify(responseData));
+                this.setState({groceryList: responseData});
+            })
+            .catch(error=>{console.log(`Unable to fetch wishlist --> ${error}`)})
+    }
 
     render() {
         return (
@@ -183,14 +197,14 @@ class ShoppingList extends Component {
                                         style={styles.wishHeader}
                                     >
                                         <Row>
-                                            <Body>
-                                                <Text style={styles.wishText}>{item.name}</Text>
+                                            <Body style={{width: wp("60%")}}>
+                                                <Text style={styles.wishText}>{item}</Text>
                                             </Body>
                                             <Right>
                                                 <Button
                                                     style={{backgroundColor:'red', width: 50, height: 60}}
                                                     onPress={()=>{
-                                                        let list = this.state.groceryList.filter(element=>element.name!==item.name);
+                                                        let list = this.state.groceryList.filter(element=>element.name!==item);
                                                         this.setState({groceryList: list});
                                                     }}
                                                 >
@@ -264,6 +278,7 @@ const styles = StyleSheet.create({
       },
       wishText: {
             fontSize: 22,
+          width: wp("40%"),
             color: 'white',
             textAlign: 'center',
           marginLeft: 20
