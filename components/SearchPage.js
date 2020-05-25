@@ -9,7 +9,7 @@ import Autocomplete from "react-native-autocomplete-input"
 import {PLACE_API, API_KEY, API_URL} from "../constant"
 import BottomSheet from "reanimated-bottom-sheet"
 import store from "../stores"
-import {importWishlist} from "../actions/WishlistAction"
+import {importWishlist, importPlan} from "../actions/WishlistAction"
 import {connect} from "react-redux"
 
 class SearchPage extends Component {
@@ -197,6 +197,27 @@ class SearchPage extends Component {
             .then((responseData)=>{
                 if(responseData){
                     console.log(responseData);
+                    let result = [];
+                    let isInResult = false;
+                    responseData.forEach(e =>{
+                        for(let i = 0; i < result.length; i++){
+                            if(e[0].storename == result[i].storename){
+                                isInResult = true;
+                                result[i].items.push(e[1]);
+                                break;
+                            }
+                        }
+                        if(!isInResult){
+                            let listEntry = {
+                                storename: e[0].storename,
+                                isExpanded: false,
+                                items: [e[1]]
+                            }
+                            result.push(listEntry);
+                        }
+                        isInResult = false;
+                    })
+                    this.props.importPlan(result);
                 }else{
                     alert("cannot optimize the item list!");
                 }
@@ -501,4 +522,4 @@ const styles = StyleSheet.create({
 
 export default connect(state => ({
     wishlist: state.wishlist.wishlist
-}), {importWishlist})(SearchPage);
+}), {importWishlist, importPlan})(SearchPage);

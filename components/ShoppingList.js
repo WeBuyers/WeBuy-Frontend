@@ -42,7 +42,7 @@ class ExpandableItemComponent extends Component {
                 activeOpacity={0.8}
                 onPress={this.props.onClickFunction}
                 style={styles.header}>
-                <Text style={styles.headerText}>{this.props.item.category_name}</Text>
+                <Text style={styles.headerText}>{this.props.item.storename}</Text>
             </TouchableOpacity>
             <View
                 style={{
@@ -55,9 +55,9 @@ class ExpandableItemComponent extends Component {
                         <TouchableOpacity
                         key={key}
                         style={styles.content}
-                        onPress={() => alert('Id: ' + item.id + ' val: ' + item.val)}>
+                        onPress={() => alert('Id: ' + item.id + ' val: ' + item.itemname)}>
                         <Text style={styles.contentText}>
-                            {item.val}
+                            {item.itemname}  ${item.price}
                         </Text>
                         <View style={styles.separator} />
                         </TouchableOpacity>
@@ -75,7 +75,7 @@ class ShoppingList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            storeList: STORES,
+            storeList: store.getState().wishlist.plan,
             groceryList: store.getState().wishlist.wishlist,
             addItem: "",
         }
@@ -142,7 +142,7 @@ class ShoppingList extends Component {
                                 <ScrollView>
                                     {this.state.storeList.map((item, key) => (
                                         <ExpandableItemComponent
-                                            key={item.category_name}
+                                            key={item.storename}
                                             onClickFunction={this.updateLayout.bind(this, key)}
                                             item={item}
                                         />

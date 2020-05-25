@@ -1,5 +1,6 @@
 const initial = {
-    wishlist: []
+    wishlist: [],
+    plan: [],
 }
 
 export const wishlistReducer = (state = initial, action) =>{
@@ -9,6 +10,11 @@ export const wishlistReducer = (state = initial, action) =>{
             return {
                 ...state,
                 wishlist: action.payload
+            }
+        case 'IMPORT_PLAN':
+            return {
+                ...state,
+                plan: action.payload
             }
         default:
             return state
