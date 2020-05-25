@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
-import {Text, Item, Input, Container, Content, Card, CardItem, Right, Thumbnail} from 'native-base';
-import {Button, Icon, Overlay, ListItem} from "react-native-elements"
-import {View, StyleSheet, FlatList, ScrollView} from "react-native"
+import {Text, Item, Input, Container, Content, Card, CardItem, Right, Thumbnail, Row, Body} from 'native-base';
+import {Button, Icon, Overlay, ListItem, CheckBox} from "react-native-elements"
+import {View, StyleSheet, FlatList, ScrollView, TouchableHighlight} from "react-native"
 import MapView from "react-native-maps";
 import {Marker, AnimatedRegion} from "react-native-maps";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-native-responsive-screen"
 import Autocomplete from "react-native-autocomplete-input"
 import {PLACE_API, API_KEY, API_URL} from "../constant"
 import BottomSheet from "reanimated-bottom-sheet"
+import store from "../stores"
+import {importWishlist, importPlan} from "../actions/WishlistAction"
+import {connect} from "react-redux"
 
 class SearchPage extends Component {
     constructor(props) {
@@ -19,7 +22,8 @@ class SearchPage extends Component {
             stores: [],
             searchResult: [],
             searched: false,
-            modelvis: false
+            modelvis: false,
+            data: []
         }
         this.BottomRef = React.createRef();
     }
@@ -74,6 +78,22 @@ class SearchPage extends Component {
     }
     componentDidMount() {
         this.findCoordinate();
+        fetch(`${API_URL}/wishlist/listall?user_id=${store.getState().login.user_id}`, {
+            method: 'GET',
+        }).then((response)=>{
+            return response.json();
+        })
+            .then(responseData=>{
+                console.log(JSON.stringify(responseData));
+               this.props.importWishlist(responseData);
+                let newData = responseData;
+                newData.forEach(element => {
+                    element.check = false;
+                });
+                this.setState({data: newData});
+            })
+            .catch(error=>{console.log(`Unable to fetch wishlist --> ${error}`)})
+
     }
 
     findItem(query){
@@ -88,6 +108,8 @@ class SearchPage extends Component {
             "Fish",
             "Granola",
             "Hash Browns",
+            "Paper",
+            "juice"
         ];
         let filtered = trucks.filter((item)=>{
             return item.toLowerCase().match(text);
@@ -122,6 +144,84 @@ class SearchPage extends Component {
                 }
             })
             .catch(error=>console.log(`error--> ${error}`))
+    }
+
+    additem(item){
+        fetch(`${API_URL}/wishlist/additem`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: store.getState().user_id,
+                item_id: item.id
+            }),
+        })
+            .then((response)=>{
+                if(response.status===200){
+                    alert("Item is successfully added to your wishlist!");
+                }else{
+                    alert("Item has already in your wishlist!");
+                }
+            }).catch(error => {console.log(`Error in add item api --> ${error}`)});
+
+    }
+
+    async itemList(){
+        let array = [];
+        for(let i = 0; i < this.state.data.length; i++){
+            if(this.state.data[i].check){
+                array.push(this.state.data[i].name);
+            }
+        }
+        await fetch(`${API_URL}/search/itemlist`,{
+            method: 'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                items: array,
+                latitude: this.state.latitude,
+                longitude: this.state.longitude
+            }),
+        })
+            .then((response)=>{
+                if(response.status===200){
+                    return response.json();
+                }else{
+                    return null;
+                }
+            })
+            .then((responseData)=>{
+                if(responseData){
+                    console.log(responseData);
+                    let result = [];
+                    let isInResult = false;
+                    responseData.forEach(e =>{
+                        for(let i = 0; i < result.length; i++){
+                            if(e[0].storename == result[i].storename){
+                                isInResult = true;
+                                result[i].items.push(e[1]);
+                                break;
+                            }
+                        }
+                        if(!isInResult){
+                            let listEntry = {
+                                storename: e[0].storename,
+                                isExpanded: false,
+                                items: [e[1]]
+                            }
+                            result.push(listEntry);
+                        }
+                        isInResult = false;
+                    })
+                    this.props.importPlan(result);
+                }else{
+                    alert("cannot optimize the item list!");
+                }
+            }).catch(error => {console.log(`Error --> ${error}`)});
     }
 
     renderDrawer = () => (
@@ -178,7 +278,7 @@ class SearchPage extends Component {
                               <Card style={{
                                   alignItems: "center",
                                   padding: 30,
-                                  height: hp("30%"),
+                                  height: hp("40%"),
                                   width: wp("47%"),
                                   borderRadius: 25
                               }}
@@ -207,8 +307,20 @@ class SearchPage extends Component {
                                               this.setState({stores: newStores});
                                           }}
                                       />
-                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{this.state.stores[item.storeid].name}</Text>
-                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{item.price}</Text>
+                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>$ {item.price}</Text>
+                                  </CardItem>
+                                  <CardItem>
+                                      <Button
+                                          type="solid"
+                                          icon={<Icon name='add' size={15} color="lightblue"/>}
+                                          size={30}
+                                          buttonStyle={{
+                                              height: 30,
+                                              width: 30,
+                                              borderRadius: 50,
+                                          }}
+                                          onPress={()=>{this.additem(item)}}
+                                          />
                                   </CardItem>
                               </Card>
                           )}
@@ -341,100 +453,37 @@ class SearchPage extends Component {
                 <Overlay isVisible={this.state.modelvis} onBackdropPress={()=>{this.setState({modelvis: !this.state.modelvis})}}>
                     <Text style={{fontSize: 18, alignSelf: 'center', paddingTop: 10}}> Import Your Wish List </Text>
                     <View style={styles.modelContainer}>
-                        <Text> Here is some wish lists</Text>
+                        <FlatList data={this.state.data}
+                                  renderItem={({item})=>(
+                                      <TouchableHighlight style={{padding: 10, width: wp("70%")}}>
+                                          <Row>
+                                              <Body>
+                                                  <Text style={{fontSize: 15}}>{item.name}</Text>
+                                              </Body>
+                                              <Right>
+                                                  <CheckBox checked={item.check}
+                                                            wrapperStyle={{marginVertical: 5}}
+                                                            onPress={()=>{
+                                                                let array = this.state.data;
+                                                                for(let i = 0; i < array.length; i++){
+                                                                    if(array[i].name===item.name){
+                                                                        array[i].check = !array[i].check;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                this.setState({data: array});
+                                                            }}/>
+                                              </Right>
+                                          </Row>
+                                      </TouchableHighlight>
+                                  )}/>
                     </View>
-                    <Button type="solid" size={30} title="Confirm"/>
+                    <Button type="solid" size={30} title="Confirm" onPress={()=>{
+                        this.setState({modelvis: !this.state.modelvis});
+                        this.itemList();
+                    }}/>
                 </Overlay>
 
-
-                {/*<View style={{marginTop: hp("65%")}}>*/}
-                {/*    {*/}
-                {/*        this.state.searched?*/}
-                {/*            <FlatList*/}
-                {/*                data={this.state.searchResult}*/}
-                {/*                renderItem={({item})=>(*/}
-                {/*                    <Card style={{*/}
-                {/*                        alignItems: 'center',*/}
-                {/*                        paddingTop: 30,*/}
-                {/*                        paddingRight: 10,*/}
-                {/*                        height: hp("22%"),*/}
-                {/*                        width: wp("47%"),*/}
-                {/*                        borderRadius: 25*/}
-                {/*                    }}*/}
-                {/*                    >*/}
-                {/*                        <CardItem cardBody style={{alignItems: 'center'}}>*/}
-                {/*                            <Button transparent style={{alignItems: 'center'}}*/}
-                {/*                                    onPress={()=>{*/}
-                {/*                                        let newStores = this.state.stores;*/}
-                {/*                                        for (let i = 0; i < newStores.length; i++) {*/}
-                {/*                                            if (item.LocationID == newStores[i].id) {*/}
-                {/*                                                newStores[i].color = "red";*/}
-                {/*                                            } else {*/}
-                {/*                                                newStores[i].color = "lightblue";*/}
-                {/*                                            }*/}
-                {/*                                        }*/}
-                {/*                                        this.setState({stores: newStores});*/}
-                {/*                                    }}*/}
-                {/*                            >*/}
-                {/*                                <Thumbnail source={avocado} style ={{height: hp("15%"), width: wp("25%"), marginTop: 30}}/>*/}
-                {/*                            </Button>*/}
-                {/*                        </CardItem>*/}
-                {/*                        <CardItem>*/}
-                {/*                            <Text style={{fontSize: 13}}>{item.Name}</Text>*/}
-                {/*                            <Text style={{fontSize: 13, fontWeight: "bold"}}>{item.Price}</Text>*/}
-                {/*                        </CardItem>*/}
-                {/*                    </Card>*/}
-                {/*                )}*/}
-                {/*                horizontal*/}
-                {/*            />*/}
-                {/*            :*/}
-                {/*            <FlatList*/}
-                {/*                data={this.state.stores}*/}
-                {/*                renderItem={({item}) => (*/}
-                {/*                    <Card style={{*/}
-                {/*                        alignItems: 'center',*/}
-                {/*                        paddingTop: 30,*/}
-                {/*                        paddingRight: 10,*/}
-                {/*                        height: hp("22%"),*/}
-                {/*                        width: wp("47%"),*/}
-                {/*                        borderRadius: 25*/}
-                {/*                    }} key={item.id}>*/}
-                {/*                        <CardItem cardBody style={{alignItems: 'center'}}>*/}
-                {/*                            <Button*/}
-
-                {/*                                transparent style={{margin: 10}}*/}
-                {/*                                onPress={() => {*/}
-                {/*                                    let newStores = this.state.stores;*/}
-                {/*                                    for (let i = 0; i < newStores.length; i++) {*/}
-                {/*                                        if (item.id == newStores[i].id) {*/}
-                {/*                                            newStores[i].color = "red";*/}
-                {/*                                        } else {*/}
-                {/*                                            newStores[i].color = "lightblue";*/}
-                {/*                                        }*/}
-                {/*                                    }*/}
-                {/*                                    this.setState({stores: newStores});*/}
-
-                {/*                                }}*/}
-                {/*                            >*/}
-
-                {/*                                <Thumbnail source={supermarket} style ={{height: hp("10%"), width: wp("30%"), marginTop: 30}}/>*/}
-                {/*                            </Button>*/}
-                {/*                        </CardItem>*/}
-                {/*                        <CardItem style={{marginTop: 20, backgroundColor: 'transparent'}}>*/}
-                {/*                            <Text style={{*/}
-                {/*                                fontWeight: "bold",*/}
-                {/*                                fontSize: 13,*/}
-                {/*                                paddingTop: 5,*/}
-                {/*                                textAlign: 'center',*/}
-                {/*                                width: 190*/}
-                {/*                            }}>{item.name}</Text>*/}
-                {/*                        </CardItem>*/}
-                {/*                    </Card>*/}
-                {/*                )}*/}
-                {/*                horizontal*/}
-                {/*            />*/}
-                {/*    }*/}
-                {/*</View>*/}
 
             </View>
 
@@ -470,4 +519,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SearchPage;
+
+export default connect(state => ({
+    wishlist: state.wishlist.wishlist
+}), {importWishlist, importPlan})(SearchPage);
