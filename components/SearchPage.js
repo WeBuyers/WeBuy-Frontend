@@ -168,6 +168,41 @@ class SearchPage extends Component {
 
     }
 
+    async itemList(){
+        let array = [];
+        for(let i = 0; i < this.state.data.length; i++){
+            if(this.state.data[i].check){
+                array.push(this.state.data[i].name);
+            }
+        }
+        await fetch(`${API_URL}/search/itemlist`,{
+            method: 'POST',
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                items: array,
+                latitude: this.state.latitude,
+                longitude: this.state.longitude
+            }),
+        })
+            .then((response)=>{
+                if(response.status===200){
+                    return response.json();
+                }else{
+                    return null;
+                }
+            })
+            .then((responseData)=>{
+                if(responseData){
+                    console.log(responseData);
+                }else{
+                    alert("cannot optimize the item list!");
+                }
+            }).catch(error => {console.log(`Error --> ${error}`)});
+    }
+
     renderDrawer = () => (
         <View style={{backgroundColor: '#5594FE', height: hp("70%")}}>
             <Text style={{
@@ -423,7 +458,8 @@ class SearchPage extends Component {
                                   )}/>
                     </View>
                     <Button type="solid" size={30} title="Confirm" onPress={()=>{
-                        this.setState({modelvis: !this.state.modelvis})
+                        this.setState({modelvis: !this.state.modelvis});
+                        this.itemList();
                     }}/>
                 </Overlay>
 
