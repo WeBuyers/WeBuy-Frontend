@@ -76,9 +76,9 @@ class SearchPage extends Component {
             }
         );
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.findCoordinate();
-        fetch(`${API_URL}/wishlist/listall?user_id=${store.getState().login.user_id}`, {
+        await fetch(`${API_URL}/wishlist/listall?user_id=${store.getState().login.user_id}`, {
             method: 'GET',
         }).then((response)=>{
             return response.json();
