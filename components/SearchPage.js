@@ -277,18 +277,33 @@ class SearchPage extends Component {
                           renderItem={({item})=>(
                               <Card style={{
                                   alignItems: "center",
-                                  padding: 30,
-                                  height: hp("40%"),
+                                  paddingHorizontal: 25,
+                                  paddingVertical: 10,
+                                  height: hp("59%"),
                                   width: wp("47%"),
                                   borderRadius: 25
                               }}
                               >
-                                  <CardItem>
-                                     <Text style={{alignSelf: 'center', fontSize: 16, width:wp("30%")}}>{item.itemname}</Text>
+                                    <CardItem>
+                                      <Button
+                                          type="solid"
+                                          icon={<Icon name='add' size={15} color="lightblue"/>}
+                                          size={30}
+                                          buttonStyle={{
+                                              height: 30,
+                                              width: 30,
+                                              borderRadius: 50,
+                                          }}
+                                          onPress={()=>{this.additem(item)}}
+                                          />
                                   </CardItem>
                                   <CardItem cardBody={true}>
-                                      <Thumbnail source={{uri: item.picturelink}} style ={{height: hp("10%"), width: wp("30%"), marginTop: 30}}/>
+                                      <Thumbnail source={{uri: item.picturelink}} style ={{height: hp("10%"), width: wp("30%"), marginTop: 15}}/>
                                   </CardItem>
+                                  <CardItem>
+                                     <Text style={{paddingTop: 20, alignSelf: 'center', fontSize: 16, width:wp("30%")}}>{item.itemname}</Text>
+                                  </CardItem>
+
                                   <CardItem>
                                       <Button
                                           title={this.state.stores[item.storeid].name}
@@ -308,19 +323,6 @@ class SearchPage extends Component {
                                           }}
                                       />
                                       <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>$ {item.price}</Text>
-                                  </CardItem>
-                                  <CardItem>
-                                      <Button
-                                          type="solid"
-                                          icon={<Icon name='add' size={15} color="lightblue"/>}
-                                          size={30}
-                                          buttonStyle={{
-                                              height: 30,
-                                              width: 30,
-                                              borderRadius: 50,
-                                          }}
-                                          onPress={()=>{this.additem(item)}}
-                                          />
                                   </CardItem>
                               </Card>
                           )}
