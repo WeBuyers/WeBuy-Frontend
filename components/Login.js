@@ -43,6 +43,7 @@ class Login extends Component {
     }
 
     async loginHandler(){
+        console.log(this.props.username);
         return fetch(`${API_URL}/auth/login`,{
             method: 'POST',
             headers: {
@@ -56,7 +57,7 @@ class Login extends Component {
         })
             .then((response) => {
                 console.log(response.status);
-                if (response.status == "200") {
+                if (response.status === 200) {
                     return response.json();
                 } else {
                     Toast.show({
@@ -199,6 +200,6 @@ class Login extends Component {
 }
 
 export default connect(state => ({
-    username: state.username,
-    password: state.password
+    username: state.login.username,
+    password: state.login.password
 }), {setUsername, setPassword, setToken, setId})(Login);
