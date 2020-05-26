@@ -225,7 +225,7 @@ class SearchPage extends Component {
     }
 
     renderDrawer = () => (
-        <View style={{backgroundColor: '#5594FE', height: hp("70%")}}>
+        <View style={{backgroundColor: '#5594FE', height: hp("100%")}}>
             <Text style={{
                 paddingTop: 10,
                 paddingBottom: 10,
@@ -240,12 +240,15 @@ class SearchPage extends Component {
                           renderItem={({item})=>(
                               <Card style={{
                                   alignItems: "center",
-                                  padding: 30,
-                                  height: hp("22%"),
+                                  padding: 10,
+                                  height: hp("30%"),
                                   width: wp("47%"),
-                                  borderRadius: 25
+                                  borderRadius: 18
                               }}
                               >
+                                  <CardItem style={{position: "absolute"}}>
+                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15, backgroundColor: "transparent", top: 90, textAlign: "left"}}>{item.place}</Text>
+                                  </CardItem>
                                   <CardItem cardBody={true}>
                                       <Button
                                           title={item.name}
@@ -264,9 +267,6 @@ class SearchPage extends Component {
                                               this.setState({stores: newStores});
                                           }}
                                       />
-                                  </CardItem>
-                                  <CardItem>
-                                      <Text style={{fontFamily: "Ubuntu-Regular", fontSize: 15}}>{item.place}</Text>
                                   </CardItem>
                               </Card>
                           )}
@@ -443,8 +443,8 @@ class SearchPage extends Component {
 
 
                 <BottomSheet
-                    snapPoints={[700, 400, 100]}
-                    initialSnap={1}
+                    snapPoints={[700, 330, 100]}
+                    initialSnap={2}
                     ref = {this.BottomRef}
                     renderContent={this.renderDrawer}
                     borderRadius={20}
