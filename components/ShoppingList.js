@@ -151,28 +151,6 @@ class ShoppingList extends Component {
                             </View>                                                      
                         </Tab>
                         <Tab heading={<TabHeading><Text>Wish List</Text></TabHeading>}>
-                            <Item rounded={true} style={{width: wp("90%"), alignSelf: "center", marginTop: 15, marginBottom: 15}}>
-                                <Icon name="search"/>
-                                <Input placeholder="Add to Wishlist..."
-                                       value={this.state.addItem}
-                                       onChangeText={(text)=>{this.setState({addItem: text})}}
-                                       style={{width: wp("50%")}}/>
-                                <Button
-                                    transparent={true}
-                                    onPress={()=>{
-                                        if(this.state.addItem.length!==0){
-                                            let list = this.state.groceryList;
-                                            let itemId =list.length+1;
-                                            list.push({name: this.state.addItem, id: itemId});
-                                            this.setState({groceryList: list, addItem: ""});
-                                        }else{
-                                            alert("please enter item name");
-                                        }
-                                    }}
-                                >
-                                    <Icon name="add"/>
-                                </Button>
-                            </Item>
                             <FlatList
                                 data={this.state.groceryList}
                                 style={styles.listContainer}
