@@ -154,7 +154,7 @@ class SearchPage extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                user_id: store.getState().user_id,
+                user_id: store.getState().login.user_id,
                 item_id: item.id
             }),
         })
@@ -443,7 +443,7 @@ class SearchPage extends Component {
 
 
                 <BottomSheet
-                    snapPoints={[700, 330, 100]}
+                    snapPoints={[hp("85%"), hp("50%"), hp("24%")]}
                     initialSnap={2}
                     ref = {this.BottomRef}
                     renderContent={this.renderDrawer}

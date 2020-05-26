@@ -117,7 +117,7 @@ class ShoppingList extends Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                user_id: store.getState().user_id,
+                user_id: store.getState().login.user_id,
                 item_id: item.id
             }),
         }).then((response)=>{
