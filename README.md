@@ -20,11 +20,12 @@ iOS simulator, installing expo client and run the project.
 If you want to open the project on your own mobile phone, download Expo Client on
 your phone. Then scan the QR code on your browser.
 
-##Demos
+Demos
+---
 
 Login/register Page
 
-![img here](./assets/screenshot/login.png)
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/login.png" width="400" height="600">
 
 ![img here](./assets/screenshot/register.png)
 
