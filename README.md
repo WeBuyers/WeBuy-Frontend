@@ -25,26 +25,28 @@ Demos
 
 Login/register Page
 
-<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/login.png" width="400" height="800">
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/login.png" width="400" height="850" alt="alt text">
 
-![img here](./assets/screenshot/register.png)
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/register.png" width="400" height="850" alt="alt text">
+
 
 Main Page (Map/Search/... etc.):
 
-![img here](./assets/screenshot/map.png)
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/map.png" width="400" height="850" alt="alt text">
 
-![img here](./assets/screenshot/items.png)
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/items.png" width="400" height="850" alt="alt text">
 
-![img here](./assets/screenshot/modal.png)
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/modal.png" width="400" height="850" alt="alt text">
 
 Shopping List Page:
 
-![img here](./assets/screenshot/plan.png)
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/plan.png" width="400" height="850" alt="alt text">
 
-![img here](./assets/screenshot/wishlist.png)
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/wishlist.png" width="400" height="850" alt="alt text">
 
 Profile Page:
 
-![img here](./assets/screenshot/profile.png)
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/profile.png" width="400" height="850" alt="alt text">
+
 
 
