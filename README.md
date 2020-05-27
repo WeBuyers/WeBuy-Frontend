@@ -11,7 +11,8 @@ download the Backend repo at the same time.
 4. Install [Expo Cli](https://docs.expo.io/workflow/expo-cli/) using npm.
 5. Run ```package.json``` before start the project.
 
-##Usage
+Usage
+---
 Simply type ```expo start``` on your terminal under the project's directory.
 Then press the ```open on iOS simulator ``` button. It will then pop up your 
 iOS simulator, installing expo client and run the project.
@@ -20,6 +21,7 @@ If you want to open the project on your own mobile phone, download Expo Client o
 your phone. Then scan the QR code on your browser.
 
 ##Demos
+
 Login/register Page
 
 ![img here](./assets/screenshot/login.png)
