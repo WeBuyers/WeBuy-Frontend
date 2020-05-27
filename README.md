@@ -25,7 +25,7 @@ Demos
 
 Login/register Page
 
-<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/login.png" width="400" height="600">
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/master/assets/screenshot/login.png" width="400" height="800">
 
 ![img here](./assets/screenshot/register.png)
 
