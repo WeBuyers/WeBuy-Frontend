@@ -219,6 +219,7 @@ class SearchPage extends Component {
                         isInResult = false;
                     })
                     this.props.importPlan(result);
+                    alert("Optimized Plan is added into your shopping list!");
                 }else{
                     alert("cannot optimize the item list!");
                 }
