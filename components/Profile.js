@@ -26,6 +26,7 @@ class Profile extends Component {
                 <Image source={icon} style={styles.avatar}/>
                 <Text style={{paddingTop: 70, alignSelf: 'center', fontSize: 27, fontFamily: "Ubuntu-Regular"}}>{store.getState().login.username}</Text>
                 <Text style={{fontSize: 16, paddingTop: 20, alignSelf: 'center', fontFamily: "Jost"}}>Address: 1000 Howard Street, San Francisco</Text>
+                <Text style={{fontSize: 16, paddingTop: 20, alignSelf: 'center', fontFamily: "Jost"}}>Email: {store.getState().login.email}</Text>
                 <Button info style={{alignSelf: "center", marginTop: 20, justifyContent:"center", width: 100}}
                         onPress={this.logoutHandler}
                 >
