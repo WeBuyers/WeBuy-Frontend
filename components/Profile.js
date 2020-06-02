@@ -5,6 +5,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from "react-nativ
 import {Actions} from "react-native-router-flux"
 import {TOKEN_KEY} from "../constant"
 import icon from "../assets/icon.png";
+import store from "../stores"
 
 class Profile extends Component {
     async logoutHandler(){
@@ -21,15 +22,25 @@ class Profile extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.header}></View>
+                <View style={styles.header}>
+                    <Button transparent style={{
+                        alignSelf: "flex-end",
+                        marginTop: hp("7%"),
+                        marginRight: 10,
+                        justifyContent:"center",
+                        width: 100,
+                        borderColor: 'white',
+                        borderWidth: 1
+                    }}
+                            onPress={this.logoutHandler}
+                    >
+                        <Text style={{color: "white", fontSize: 16}}>Log Out</Text>
+                    </Button>
+                </View>
                 <Image source={icon} style={styles.avatar}/>
-                <Text style={{paddingTop: 70, alignSelf: 'center', fontSize: 27, fontFamily: "Ubuntu-Regular"}}>Oswald He</Text>
+                <Text style={{paddingTop: 70, alignSelf: 'center', fontSize: 27, fontFamily: "Ubuntu-Regular"}}>{store.getState().login.username}</Text>
                 <Text style={{fontSize: 16, paddingTop: 20, alignSelf: 'center', fontFamily: "Jost"}}>Address: 1000 Howard Street, San Francisco</Text>
-                <Button info style={{alignSelf: "center", marginTop: 20, justifyContent:"center", width: 100}}
-                        onPress={this.logoutHandler}
-                >
-                    <Text style={{color: "white"}}>Log Out</Text>
-                </Button>
+                <Text style={{fontSize: 16, paddingTop: 20, alignSelf: 'center', fontFamily: "Jost"}}>Email: {store.getState().login.email}</Text>
             </View>
         );
     }

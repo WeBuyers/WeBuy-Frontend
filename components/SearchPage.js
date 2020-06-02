@@ -38,7 +38,7 @@ class SearchPage extends Component {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                 });
-                fetch(`${PLACE_API}/json?key=${API_KEY}&location=${position.coords.latitude},${position.coords.longitude}&radius=800&type=supermarket`,{
+                fetch(`${PLACE_API}/json?key=${API_KEY}&location=${position.coords.latitude},${position.coords.longitude}&radius=1800&type=supermarket`,{
                     method: "GET"
                 })
                     .then((response)=>{
@@ -50,6 +50,7 @@ class SearchPage extends Component {
                     })
                     .then((responseData)=>{
                         if(responseData){
+                            console.log(responseData);
                             let result = responseData.results;
                             let stores = [];
                             for(let i = 0; i < result.length; i++){
@@ -218,6 +219,7 @@ class SearchPage extends Component {
                         isInResult = false;
                     })
                     this.props.importPlan(result);
+                    alert("Optimized Plan is added into your shopping list!");
                 }else{
                     alert("cannot optimize the item list!");
                 }

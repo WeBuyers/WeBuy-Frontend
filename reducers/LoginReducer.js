@@ -1,6 +1,7 @@
 const initial = {
     username: "",
     password: "",
+    email: "",
     auth: "",
     user_id: 0
 }
@@ -12,6 +13,11 @@ export const loginReducer = (state = initial, action) =>{
             return {
                 ...state,
                 username: action.text
+            }
+        case 'SET_EMAIL':
+            return {
+                ...state,
+                email: action.text
             }
         case 'SET_PASSWORD':
             return {
