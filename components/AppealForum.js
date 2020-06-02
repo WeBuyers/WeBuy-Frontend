@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, ScrollView} from "react-native";
+import {View, StyleSheet, ScrollView, TextInput} from "react-native";
 import {Container, Content, Text, List, ListItem, Header, Button, Right, Body} from "native-base"
 import {Icon} from 'react-native-elements';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
@@ -72,6 +72,28 @@ class AppealForum extends Component {
                                 </Right>
                             </ListItem>)}
                         </List>
+                        
+                        {/* <TextInput
+                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                            onChangeText={text => onChangeText(text)}
+                            value={value}
+                        /> */}
+                        <Button onPress={() =>{
+                            let newItem = {
+                                id: 4,
+                                like: false,
+                                name: "Go Shopping on Jun. 1st",
+                                num: 6
+                            };
+                            let newOptions = this.state.options.concat(newItem);
+                            this.setState({
+                                options : newOptions
+                            });
+                        }}
+                        >
+                            <Text style={{color : "white", textAlign:"center"}}>Make a new post</Text>
+
+                        </Button>
                     </ScrollView>
                 </Content>
             </Container>
