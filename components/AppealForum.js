@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, ScrollView, InputGroup, Input} from "react-native";
-import {Container, Content, Text, List, ListItem, Header, Button, Right, Body} from "native-base"
+import {View, StyleSheet, ScrollView} from "react-native";
+import {Container, Content, Text, List, ListItem, Header, Button, Right, Body, InputGroup, Input} from "native-base"
 import {Icon} from 'react-native-elements';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 
@@ -72,42 +72,30 @@ class AppealForum extends Component {
                                 </Right>
                             </ListItem>)}
 
-                            {/* <ListItem style={{borderColor: 'white'}}>
-                            <InputGroup>
-                                <Icon name='lock' type='simple-line-icon' color='#2cabfe' size={25}/>
-                                <Item floatingLabel>
-                                    <Label style={{
-                                        padding: 10,
-                                        fontSize: 15,
-                                        fontFamily: "Ubuntu-Medium"
-                                    }}> Password </Label>
+                            <ListItem>
+                                <InputGroup>
+                                    <Icon name='pencil' type='simple-line-icon' color='#2cabfe' size={25} style={{transform: [{rotateY: '180deg'}]}}/>
                                     <Input
                                         style={{paddingLeft: 10, fontFamily: 'Ubuntu-Regular'}}
-                                        onChangeText={(text) => this.props.setPassword(text)}
-                                        value={this.props.password}
-                                        secureTextEntry={true}
+                                        onChangeText={(text) => alert("function to be implemented")}
                                     />
-                                </Item>
-                            </InputGroup>
-                            </ListItem> */}
-
-                            <ListItem>
-                            <Button textAlign="center" 
-                                onPress={() =>{
-                                    let newItem = {
-                                        id: 4,
-                                        like: false,
-                                        name: "Go Shopping on Jun. 1st",
-                                        num: 6
-                                    };
-                                    let newOptions = this.state.options.concat(newItem);
-                                    this.setState({
-                                        options : newOptions
-                                    });
-                                }}
-                                >
-                                <Text style={{color : "white"}}>Make a new post</Text>
-                            </Button>
+                                </InputGroup>
+                                <Button textAlign="center" 
+                                    onPress={() =>{
+                                        let newItem = {
+                                            id: 4,
+                                            like: false,
+                                            name: "Go Shopping on Jun. 1st",
+                                            num: 6
+                                        };
+                                        let newOptions = this.state.options.concat(newItem);
+                                        this.setState({
+                                            options : newOptions
+                                        });
+                                    }}
+                                    >
+                                    <Text style={{color : "white"}}>Post</Text>
+                                </Button>
                             </ListItem>
                         </List>
                        
