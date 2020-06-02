@@ -7,8 +7,9 @@ import store from "./stores"
 import {Provider} from "react-redux"
 import {Scene, Router, Actions} from "react-native-router-flux";
 import {TOKEN_KEY, API_URL} from "./constant";
+import {setId, setUsername, setEmail} from "./actions/LoginAction"
 
-
+console.disableYellowBox = true;
 export default class App extends Component{
     state = {
         init: true
@@ -26,10 +27,19 @@ export default class App extends Component{
                        }
                    }).then((response)=>{
                         if(response.status===200){
-                            this.setState({init: false});
+                            return response.json();
                         }else{
-                            this.setState({init: true});
+                            return null;
                         }
+                   }).then((responseData)=>{
+                       if(responseData){
+                           store.dispatch(setId(responseData.user_id));
+                           store.dispatch(setUsername(responseData.username));
+                           store.dispatch(setEmail(responseData.email));
+                           this.setState({init: false});
+                       }else{
+                           this.setState({init: true});
+                       }
                    })
                }
            }).catch(error=>{
