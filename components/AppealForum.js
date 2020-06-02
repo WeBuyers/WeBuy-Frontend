@@ -9,6 +9,7 @@ class AppealForum extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            posttext: "",
             options: [
                 {
                     id: 1,
@@ -74,19 +75,19 @@ class AppealForum extends Component {
 
                             <ListItem>
                                 <InputGroup>
-                                    <Icon name='pencil' type='simple-line-icon' color='#2cabfe' size={25} style={{transform: [{rotateY: '180deg'}]}}/>
                                     <Input
                                         style={{paddingLeft: 10, fontFamily: 'Ubuntu-Regular'}}
-                                        onChangeText={(text) => alert("function to be implemented")}
+                                        onChangeText={(text) => this.setState({posttext: text})}
+                                        value={this.state.posttext}
                                     />
                                 </InputGroup>
                                 <Button textAlign="center" 
                                     onPress={() =>{
                                         let newItem = {
-                                            id: 4,
+                                            id: this.state.options.length+1,
                                             like: false,
-                                            name: "Go Shopping on Jun. 1st",
-                                            num: 6
+                                            name: this.state.posttext,
+                                            num: 0
                                         };
                                         let newOptions = this.state.options.concat(newItem);
                                         this.setState({
