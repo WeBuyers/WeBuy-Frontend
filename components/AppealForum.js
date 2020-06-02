@@ -50,7 +50,7 @@ class AppealForum extends Component {
                         <List>
                             {this.state.options.map((item) =><ListItem key={item.id}>
                                 <Body>
-                                    <Text>{item.name}</Text>
+                                    <Text style={{fontFamily: 'Ubuntu-Regular'}}>{item.name}</Text>
                                 </Body>
                                 <Right>
                                     <Button transparent onPress={() =>{
