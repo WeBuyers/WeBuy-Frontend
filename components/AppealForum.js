@@ -9,17 +9,17 @@ class AppealForum extends Component {
         super(props);
         this.state = {
             options: [{
-                like: 0, name: "Go to Target Westwood Today",
-            },{like: 0, name: "Need Help for Buying Noodles", 
-            },{like: 0, name: "Buy Rice, Need help? ",
-            },{like: 0, name: "Go Shopping on Jun. 1st"}]
+                like: Math.round(Math.random() * 50) * 2, name: "Go to Target Westwood Today",
+            },{like: Math.round(Math.random() * 50) * 2, name: "Need Help for Buying Noodles", 
+            },{like: Math.round(Math.random() * 50) * 2, name: "Buy Rice, Need help? ",
+            },{like: Math.round(Math.random() * 50) * 2, name: "Go Shopping on Jun. 1st"}]
         };
     }
 
     onLike(index) {
         this.setState((state) => {
             let newOptions = state.options.slice();
-            newOptions[index].like++;
+            newOptions[index].like = newOptions[index].like ^ 1;
             return {
                 options: newOptions
             };
@@ -41,7 +41,7 @@ class AppealForum extends Component {
                                 </Body>
                                 <Right>
                                     <Button transparent onPress={() => this.onLike(index)}>
-                                        <Icon name="thumbs-up" />
+                                        <Icon name="thumbs-up"/>
                                         <Text>{(dict.like <= 1) ? (dict.like + ' like') : (dict.like + ' likes')}</Text>
                                     </Button>
                                 </Right>
