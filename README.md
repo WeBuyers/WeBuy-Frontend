@@ -46,11 +46,11 @@ Shopping List Page:
 
 Profile Page:
 
-<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/profile/assets/screenshot/PROFILE.jpg" width="400" height="850" alt="alt text">
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/profile/assets/screenshot/profile.png" width="400" height="850" alt="alt text">
 
 Forum Page: 
 
-<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/profile/assets/screenshot/screenshot%20like.jpg" width="400" height="850" alt="alt text">
+<img src="https://github.com/WeBuyers/WeBuy-Frontend/blob/profile/assets/screenshot/forum.png" width="400" height="850" alt="alt text">
 
 
 
