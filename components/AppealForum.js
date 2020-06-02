@@ -4,6 +4,28 @@ import {Container, Content, Text, List, ListItem, Header, Button, Icon, Right, B
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 
 class AppealForum extends Component {
+
+    constructor (props) {
+        super(props);
+        this.state = {
+            options: [{
+                like: 0, name: "Go to Target Westwood Today",
+            },{like: 0, name: "Need Help for Buying Noodles", 
+            },{like: 0, name: "Buy Rice, Need help? ",
+            },{like: 0, name: "Go Shopping on Jun. 1st"}]
+        };
+    }
+
+    onLike(index) {
+        this.setState((state) => {
+            let newOptions = state.options.slice();
+            newOptions[index].like++;
+            return {
+                options: newOptions
+            };
+        })
+    }
+
     render() {
         return (
             <Container style={styles.container}>
@@ -13,61 +35,17 @@ class AppealForum extends Component {
                     </Header>
                     <ScrollView style={styles.scroll}>
                         <List>
-                            <ListItem>
+                            {this.state.options.map((dict, index) =><ListItem key={dict.name}>
                                 <Body>
-                                    <Text> Topic 1</Text>
+                                    <Text>{dict.name}</Text>
                                 </Body>
                                 <Right>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
+                                    <Button transparent onPress={() => this.onLike(index)}>
+                                        <Icon name="thumbs-up" />
+                                        <Text>{(dict.like <= 1) ? (dict.like + ' like') : (dict.like + ' likes')}</Text>
                                     </Button>
                                 </Right>
-                            </ListItem>
-                            <ListItem>
-                                <Body>
-                                    <Text> Topic 2</Text>
-                                </Body>
-                                <Right>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Right>
-                            </ListItem>
-                            <ListItem>
-                                <Body>
-                                    <Text> Topic 3</Text>
-                                </Body>
-                                <Right>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Right>
-                            </ListItem>
-                            <ListItem>
-                                <Body>
-                                    <Text> Topic 4</Text>
-                                </Body>
-                                <Right>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Right>
-                            </ListItem>
-                            <ListItem>
-                                <Body>
-                                    <Text> Topic 5</Text>
-                                </Body>
-                                <Right>
-                                    <Button transparent>
-                                        <Icon active name="thumbs-up" />
-                                        <Text>12 Likes</Text>
-                                    </Button>
-                                </Right>
-                            </ListItem>
+                            </ListItem>)}
                         </List>
                     </ScrollView>
                 </Content>
