@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, ScrollView} from "react-native";
-import {Container, Content, Text, List, ListItem, Header, Button, Icon, Right, Body} from "native-base"
+import {Container, Content, Text, List, ListItem, Header, Button, Right, Body} from "native-base"
+import {Icon} from 'react-native-elements';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 
 class AppealForum extends Component {
@@ -8,23 +9,35 @@ class AppealForum extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            options: [{
-                like: Math.round(Math.random() * 50) * 2, name: "Go to Target Westwood Today",
-            },{like: Math.round(Math.random() * 50) * 2, name: "Need Help for Buying Noodles", 
-            },{like: Math.round(Math.random() * 50) * 2, name: "Buy Rice, Need help? ",
-            },{like: Math.round(Math.random() * 50) * 2, name: "Go Shopping on Jun. 1st"}]
+            options: [
+                {
+                    id: 1,
+                    like: false,
+                    name: "Go to Target Westwood Today",
+                    num: 30
+                },
+                {
+                    id: 2,
+                    like: false,
+                    name: "Need Help for Buying Noodles",
+                    num: 45
+                },
+                {
+                    id: 3,
+                    like: false,
+                    name: "Buy Rice, Need help? ",
+                    num: 38
+                },
+                {
+                    id: 4,
+                    like: false,
+                    name: "Go Shopping on Jun. 1st",
+                    num: 6
+                }
+                ]
         };
     }
 
-    onLike(index) {
-        this.setState((state) => {
-            let newOptions = state.options.slice();
-            newOptions[index].like = newOptions[index].like ^ 1;
-            return {
-                options: newOptions
-            };
-        })
-    }
 
     render() {
         return (
@@ -35,14 +48,26 @@ class AppealForum extends Component {
                     </Header>
                     <ScrollView style={styles.scroll}>
                         <List>
-                            {this.state.options.map((dict, index) =><ListItem key={dict.name}>
+                            {this.state.options.map((item) =><ListItem key={item.id}>
                                 <Body>
-                                    <Text>{dict.name}</Text>
+                                    <Text>{item.name}</Text>
                                 </Body>
                                 <Right>
-                                    <Button transparent onPress={() => this.onLike(index)}>
-                                        <Icon name="thumbs-up"/>
-                                        <Text>{(dict.like <= 1) ? (dict.like + ' like') : (dict.like + ' likes')}</Text>
+                                    <Button transparent onPress={() =>{
+                                        let array = this.state.options;
+                                        array.forEach(e =>{
+                                            if(e.id === item.id){
+                                                e.like = !e.like;
+                                            }
+                                        });
+                                        this.setState({options: array});
+                                    }}>
+                                        {
+                                            item.like?
+                                                <Icon name="thumbs-up" type="font-awesome" color='#47C1FE'/>
+                                                : <Icon name="thumbs-o-up" type="font-awesome" color='#47C1FE'/>
+                                        }
+                                        <Text>{item.like?(item.num+1):(item.num)} likes</Text>
                                     </Button>
                                 </Right>
                             </ListItem>)}
@@ -64,7 +89,6 @@ const styles = StyleSheet.create({
     },
     scroll: {
         height: hp("75%"),
-        margin: 10
     }
 });
 
