@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, ScrollView} from "react-native";
-import {Container, Content, Text, List, ListItem, Header, Button, Right, Body} from "native-base"
+import {Container, Content, Text, List, ListItem, Header, Button, Right, Body, InputGroup, Input} from "native-base"
 import {Icon} from 'react-native-elements';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 
@@ -71,7 +71,34 @@ class AppealForum extends Component {
                                     </Button>
                                 </Right>
                             </ListItem>)}
+
+                            <ListItem>
+                                <InputGroup>
+                                    <Icon name='pencil' type='simple-line-icon' color='#2cabfe' size={25} style={{transform: [{rotateY: '180deg'}]}}/>
+                                    <Input
+                                        style={{paddingLeft: 10, fontFamily: 'Ubuntu-Regular'}}
+                                        onChangeText={(text) => alert("function to be implemented")}
+                                    />
+                                </InputGroup>
+                                <Button textAlign="center" 
+                                    onPress={() =>{
+                                        let newItem = {
+                                            id: 4,
+                                            like: false,
+                                            name: "Go Shopping on Jun. 1st",
+                                            num: 6
+                                        };
+                                        let newOptions = this.state.options.concat(newItem);
+                                        this.setState({
+                                            options : newOptions
+                                        });
+                                    }}
+                                    >
+                                    <Text style={{color : "white"}}>Post</Text>
+                                </Button>
+                            </ListItem>
                         </List>
+                       
                     </ScrollView>
                 </Content>
             </Container>
